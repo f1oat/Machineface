@@ -27,13 +27,22 @@ import Machinekit.Controls 1.0
 import Machinekit.Application 1.0
 import Machinekit.Application.Controls 1.0
 import Machinekit.PathView 1.0
+import QtQuick.Controls.Styles 1.3
+import "."
 
 ServiceWindow {
     id: window
+    color: "transparent" //MyStyle.backgroundColor
+
+    Image {
+        id: background
+        anchors.fill: parent
+        fillMode: Image.Stretch
+        source: "images/black-parchment-paper-texture.jpg"
+    }
+
     visible: true
-    width: 800
-    height: 600
-    title: applicationCore.applicationName + (d.machineName == "" ? "" :" - " +  d.machineName)
+    title: applicationCore.applicationName + (d.machineName == "" ? "" : " - " + d.machineName)
 
     QtObject {
         id: d
@@ -50,52 +59,69 @@ ServiceWindow {
         id: pathViewCore
     }
 
-    ApplicationToolBar {
-        id: toolBar
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.left: parent.left
-        width: parent.height * 0.1
-    }
-
     ApplicationFileDialog {
         id: applicationFileDialog
     }
 
-    TabView {
-        id: mainTab
-        frameVisible: false
-        anchors.left: toolBar.right
-        anchors.right: displayPanel.left
-        anchors.top: parent.top
-        anchors.bottom: parent.bottom
-        anchors.rightMargin: Screen.pixelDensity
-        anchors.leftMargin: Screen.pixelDensity / 2
+    ColumnLayout {
+        width: window.width
 
-        JogControlTab { }
-        MdiTab { }
-        GCodeTab { }
-        PreviewTab { }
-        VideoTab { }
-        ExtrasTab { }
-        SettingsTab { }
-    }
+        ApplicationToolBar {
+            id: toolBar
+            width: window.width
+            height: 70
+        }
 
-    DisplayPanel {
-        id: displayPanel
-        anchors.right: parent.right
-        anchors.top: parent.top
-        anchors.bottom: applicationProgressBar.top
-        width: parent.width * 0.25
-        anchors.margins: Screen.pixelDensity
-    }
+        StatusPanel {
+            foregroundColor: MyStyle.foregroundColor
+            backgroundColor: MyStyle.backgroundColor
+            background: "transparent"
+        }
 
-    ApplicationProgressBar {
-        id: applicationProgressBar
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        width: displayPanel.width
-        anchors.margins: Screen.pixelDensity
+        TabView {
+            id: mainTab
+            Layout.preferredWidth: window.width
+            Layout.preferredHeight: 600
+            currentIndex: 0
+            frameVisible: true
+            transformOrigin: Item.Center
+
+            style: TabViewStyle {
+                           frameOverlap: 1
+                           tab: Rectangle {
+                               color: styleData.selected ? "grey" : MyStyle.backgroundColor
+                               border.color:  MyStyle.foregroundColor
+                               implicitWidth: Math.max(text.width + 4, 80)
+                               implicitHeight: 40
+                               radius: 2
+                               Text {
+                                   id: text
+                                   anchors.centerIn: parent
+                                   text: styleData.title
+                                   color: MyStyle.foregroundColor
+                               }
+                           }
+                           frame: Rectangle { color: "transparent" /*MyStyle.backgroundColor*/ }
+                       }
+
+            JogControlTab {}
+            MiscTab {}
+            MdiTab {}
+            GCodeTab {}
+            PreviewTab {}
+            VideoTab {}
+            //ExtrasTab {}
+            SettingsTab {}
+        }
+
+        ApplicationProgressBar {
+            id: applicationProgressBar
+            anchors.right: parent.right
+            anchors.bottom: parent.bottom
+            width: parent.width
+            anchors.margins: Screen.pixelDensity
+        }
+
     }
 
     ApplicationNotifications {
@@ -107,4 +133,3 @@ ServiceWindow {
         messageWidth: parent.width * 0.25
     }
 }
-

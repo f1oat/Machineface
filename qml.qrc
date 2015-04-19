@@ -40,5 +40,20 @@
         <file>Machineface/ExtruderJogButton.qml</file>
         <file>Machineface/icons/ic_home_grey600_48dp.png</file>
         <file>Machineface/HomeButton.qml</file>
+        <file>Machineface/LedButton.qml</file>
+        <file>Machineface/SpindleSpeedHandler.qml</file>
+        <file>Machineface/OtherControls.qml</file>
+        <file>Machineface/MyJog.qml</file>
+        <file>Machineface/MiscTab.qml</file>
+        <file>Machineface/MyStyleObject.qml</file>
+        <file>Machineface/qmldir</file>
+        <file>Machineface/DisplayValue.qml</file>
+        <file>Machineface/MyButton.qml</file>
+        <file>Machineface/StatusGauge.qml</file>
+        <file>Machineface/StatusPanel.qml</file>
+        <file>Machineface/images/dark-metal-texture.jpg</file>
+        <file>Machineface/images/dark-metal-texture-vert.jpg</file>
+        <file>Machineface/images/black-parchment-paper-texture.jpg</file>
+        <file>Machineface/DroLine.qml</file>
     </qresource>
 </RCC>

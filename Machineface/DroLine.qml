@@ -1,0 +1,168 @@
+import QtQuick 2.0
+import QtQuick.Controls 1.2
+import QtQuick.Layouts 1.0
+
+Rectangle {
+    property color foregroundColor: "white"
+    property color backgroundColor: "black"
+    property color homedColor: "green"
+    property color unhomedColor: "red"
+    property color digitsColor: homed ? homedColor : unhomedColor
+
+    property int bigFontSize: 26
+    property int smallFontSize: 12
+
+    property double wc_value: -10.12345
+    property double mc_value: 45.12345
+    property double dtg_value: -3.75
+
+    property string title: "X"
+    property bool homed: true
+    property string g5x: "G54"
+
+    width: 300
+    height: 61
+
+    id: droLine
+
+    color: backgroundColor
+
+    Label {
+        id: dummySmall
+        visible: false
+        text: "-0000.000"
+        font.pointSize: smallFontSize
+        font.bold: true
+    }
+
+    Label {
+        id: dummyBig
+        visible: false
+        text: "-0000.000"
+        font.pointSize: bigFontSize
+        font.bold: true
+    }
+
+    Rectangle {
+        id: border
+        color: backgroundColor
+        border.width: 1
+        border.color: foregroundColor
+        anchors.fill: parent
+    }
+
+    ColumnLayout {
+        id: column
+        anchors.fill: parent
+
+        RowLayout {
+            id: rowLayout1
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+            anchors.top: parent.top
+            anchors.topMargin: -4
+            Label {
+                id: axisName
+                text: title
+                anchors.left: parent.left
+                anchors.leftMargin: 3
+                font.pointSize: bigFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignRight
+            }
+
+            Label {
+                id: g5x_label
+                text: g5x
+                anchors.left: axisName.right
+                anchors.leftMargin: 0
+                anchors.bottom: axisName.bottom
+                anchors.bottomMargin: 0
+                verticalAlignment: Text.AlignBottom
+                font.pointSize: smallFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            Label {
+                id: wc_dro
+                Layout.preferredWidth: bigFontSize * 9
+                text: wc_value.toFixed(3)
+                anchors.right: parent.right
+                anchors.rightMargin: 3
+                anchors.top: parent.top
+                anchors.topMargin: -1
+                font.pointSize: bigFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignRight
+            }
+
+        }
+
+        RowLayout {
+            id: rowLayout2
+            anchors.top: rowLayout1.bottom
+            anchors.topMargin: -1
+            anchors.left: parent.left
+            anchors.leftMargin: 0
+            anchors.right: parent.right
+            anchors.rightMargin: 0
+
+            Label {
+                id: abs_label
+                text: "Abs"
+                anchors.left: parent.left
+                anchors.leftMargin: 30
+                anchors.top: axisName.bottom
+                anchors.topMargin: 0
+                verticalAlignment: Text.AlignTop
+                font.pointSize: smallFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            Label {
+                id: abs_dro
+                text: wc_value.toFixed(3)
+                anchors.rightMargin: -(dummySmall.width + 4)
+                anchors.right: abs_label.right
+                anchors.top: axisName.bottom
+                anchors.topMargin: 0
+                font.pointSize: smallFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignRight
+            }
+
+
+            Label {
+                id: dtg_label
+                text: "DTG"
+                anchors.rightMargin: dummySmall.width + 4
+                anchors.right: parent.right
+                font.pointSize: smallFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignLeft
+            }
+
+            Label {
+                id: dtg_dro
+                text: dtg_value.toFixed(3)
+                anchors.right: parent.right
+                anchors.rightMargin: 4
+                font.pointSize: smallFontSize
+                color: droLine.digitsColor
+                font.bold: true
+                horizontalAlignment: Text.AlignRight
+            }
+        }
+    }
+}
+

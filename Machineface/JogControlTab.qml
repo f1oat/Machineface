@@ -7,7 +7,6 @@ Tab {
     id: tab
     title: qsTr("Jog")
 
-    ButtonJog {
-
+    MyJog {
     }
 }

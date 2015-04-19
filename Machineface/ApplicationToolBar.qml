@@ -7,12 +7,12 @@ import Machinekit.Controls 1.0
 import Machinekit.Application.Controls 1.0
 
 Rectangle {
-    color: systemPalette.dark
+    color: "#000000"
 
     SystemPalette { id: systemPalette }
     FontLoader { id: iconFont; source: "icons/material-icon-font.ttf" }
 
-    ColumnLayout {
+    RowLayout {
         id: toolBar
         anchors.fill: parent
         anchors.margins: Screen.pixelDensity / 2
@@ -21,17 +21,8 @@ Rectangle {
             Layout.fillWidth: true
             Layout.preferredHeight: width
             action : EstopAction { id: estopAction }
-            //iconSource: "icons/ic_report_white_48dp.png"
-            iconSource: ""
-            Text {  // using icon fonts is an alternative
-                text: "\ue134"
-                color: "white"
-                font.family: iconFont.name
-                anchors.fill: parent
-                font.pixelSize: parent.width * 0.95
-                verticalAlignment: Text.AlignVCenter
-                horizontalAlignment: Text.AlignHCenter
-            }
+            iconSource: "icons/ic_report_white_48dp.png"
+            //iconSource: ""
         }
         TouchButton {
             Layout.fillWidth: true

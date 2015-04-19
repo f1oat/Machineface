@@ -19,3 +19,7 @@ ios: {
 android: {
     LIBS += -lmachinetalk-protobuf
 }
+
+DISTFILES += \
+    MyJob.qml \
+    Machineface/qmldir

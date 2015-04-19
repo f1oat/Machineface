@@ -33,6 +33,8 @@ ApplicationObject {
     property bool _ready: status.synced && command.connected
     property bool _remoteUpdate: false
 
+    property double speed: _ready ? status.motion.spindleSpeed : 0
+
     onValueChanged: {
         if (_ready && !_remoteUpdate) {
             command.setSpindleOverride(value)
@@ -57,8 +59,8 @@ ApplicationObject {
         _remoteUpdate = true
         minimumValue = status.config.minSpindleOverride
         maximumValue = status.config.maxSpindleOverride
-        if (value !== status.motion.spindle_speed) {
-            value = status.motion.spindle_speed
+        if (value !== status.motion.spindleSpeed) {
+            value = status.motion.spindleSpeed
         }
         else {
             synced = true
