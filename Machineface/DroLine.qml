@@ -9,8 +9,8 @@ Rectangle {
     property color unhomedColor: "red"
     property color digitsColor: homed ? homedColor : unhomedColor
 
-    property int bigFontSize: 26
-    property int smallFontSize: 12
+    property int bigFontSize: 37
+    property int smallFontSize: 16
 
     property double wc_value: -10.12345
     property double mc_value: 45.12345
@@ -31,7 +31,7 @@ Rectangle {
         id: dummySmall
         visible: false
         text: "-0000.000"
-        font.pointSize: smallFontSize
+        font.pixelSize: smallFontSize
         font.bold: true
     }
 
@@ -39,7 +39,7 @@ Rectangle {
         id: dummyBig
         visible: false
         text: "-0000.000"
-        font.pointSize: bigFontSize
+        font.pixelSize: bigFontSize
         font.bold: true
     }
 
@@ -66,9 +66,9 @@ Rectangle {
             Label {
                 id: axisName
                 text: title
+                font.pixelSize: bigFontSize
                 anchors.left: parent.left
                 anchors.leftMargin: 3
-                font.pointSize: bigFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignRight
@@ -77,12 +77,12 @@ Rectangle {
             Label {
                 id: g5x_label
                 text: g5x
+                font.pixelSize: smallFontSize
                 anchors.left: axisName.right
                 anchors.leftMargin: 0
                 anchors.bottom: axisName.bottom
                 anchors.bottomMargin: 0
                 verticalAlignment: Text.AlignBottom
-                font.pointSize: smallFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignLeft
@@ -92,11 +92,11 @@ Rectangle {
                 id: wc_dro
                 Layout.preferredWidth: bigFontSize * 9
                 text: wc_value.toFixed(3)
+                font.pixelSize: bigFontSize
                 anchors.right: parent.right
                 anchors.rightMargin: 3
                 anchors.top: parent.top
                 anchors.topMargin: -1
-                font.pointSize: bigFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignRight
@@ -116,12 +116,12 @@ Rectangle {
             Label {
                 id: abs_label
                 text: "Abs"
+                font.pixelSize: smallFontSize
                 anchors.left: parent.left
                 anchors.leftMargin: 30
                 anchors.top: axisName.bottom
                 anchors.topMargin: 0
                 verticalAlignment: Text.AlignTop
-                font.pointSize: smallFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignLeft
@@ -130,11 +130,10 @@ Rectangle {
             Label {
                 id: abs_dro
                 text: wc_value.toFixed(3)
+                font.pixelSize: smallFontSize
                 anchors.rightMargin: -(dummySmall.width + 4)
                 anchors.right: abs_label.right
-                anchors.top: axisName.bottom
                 anchors.topMargin: 0
-                font.pointSize: smallFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignRight
@@ -144,9 +143,9 @@ Rectangle {
             Label {
                 id: dtg_label
                 text: "DTG"
+                font.pixelSize: smallFontSize
                 anchors.rightMargin: dummySmall.width + 4
                 anchors.right: parent.right
-                font.pointSize: smallFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignLeft
@@ -155,9 +154,9 @@ Rectangle {
             Label {
                 id: dtg_dro
                 text: dtg_value.toFixed(3)
+                font.pixelSize: smallFontSize
                 anchors.right: parent.right
                 anchors.rightMargin: 4
-                font.pointSize: smallFontSize
                 color: droLine.digitsColor
                 font.bold: true
                 horizontalAlignment: Text.AlignRight

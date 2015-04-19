@@ -31,7 +31,7 @@ ApplicationWindow {
     visibility: (Qt.platform.os == "android") ? "FullScreen" : "AutomaticVisibility"
     visible: true
     width: 600
-    height: 900 // Tablet screen height will be 1024
+    height: 950 // Tablet screen height will be 1024
     title: connectionWindow.title
     toolBar: connectionWindow.toolBar
     statusBar: connectionWindow.statusBar

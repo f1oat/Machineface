@@ -4,6 +4,8 @@ import QtQuick.Layouts 1.0
 import Machinekit.Application 1.0
 import Machinekit.Application.Controls 1.0
 import Machinekit.Controls 1.0
+import Machinekit.HalRemote.Controls 1.0
+import QtQuick 2.1
 
 ApplicationItem {
     id: dro
@@ -23,6 +25,7 @@ ApplicationItem {
     property int g5xIndex: _ready ? status.motion.g5xIndex : 1
     property var mc_position: getPosition(false)
     property var wc_position: getPosition(true)
+    property var dtg: _ready ? status.motion.dtg : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
     property bool _ready: status.synced
     property var _axisNames: ["x", "y", "z", "a", "b", "c", "u", "v", "w"]
     property var g5xOffset: _ready ? status.motion.g5xOffset : {"x":-5.0, "y":+12.0, "z":-70, "a":2.0}
@@ -58,6 +61,9 @@ ApplicationItem {
     Rectangle {
         anchors.fill: parent
         color: background
+        anchors.rightMargin: 0
+        anchors.leftMargin: 0
+        anchors.topMargin: 0
         anchors.bottomMargin: 0
 
         Column {
@@ -80,7 +86,7 @@ ApplicationItem {
                     title: dro.axisNames[index]
                     wc_value: dro.wc_position[dro._axisNames[index]].toFixed(3)
                     mc_value: dro.wc_position[dro._axisNames[index]].toFixed(3)
-                    bigFontSize: dro.bigFontSize
+                    dtg_value: dro.dtg[dro._axisNames[index]].toFixed(3)
                     smallFontSize: dro.smallFontSize
                     foregroundColor: dro.foregroundColor
                     backgroundColor: dro.backgroundColor
@@ -88,93 +94,128 @@ ApplicationItem {
                     homed: dro.axisHomed[index].homed
                 }
             }
-    }
+        }
 
-        Grid {
-            id: grid1
-            x: 305
+        Label {
+            id: labelSpindle
+            x: 307
+            y: 4
+            color: foregroundColor
+            font.bold: true
+            text: "Spindle:"
+            font.pixelSize: 14
+        }
+
+        Gauge {
+            id: gaugeSpindle
+            x: 376
             y: 2
-            anchors.right: parent.right
-            anchors.rightMargin: 2
-            anchors.left: coords.right
-            anchors.leftMargin: 4
-            anchors.top: parent.top
-            anchors.topMargin: 2
-            anchors.bottom: parent.bottom
-            anchors.bottomMargin: 2
-            spacing: 5
-            rows: 0
-            columns: 3
+            width: 170
+            height: 20
+            maximumValue: 3000.0
+            z0BorderValue: maximumValue/3.0
+            z1BorderValue: maximumValue*2.0/3.0
+            value: dro.spindleSpeed
+            backgroundColor: dro.backgroundColor
+            textColor: dro.foregroundColor
+            decimals: 0
+        }
 
-            Label {
-                id: labelSpindle
-                color: foregroundColor
-                font.bold: true
-                text: "Spindle:"
-            }
+        Led {
+            id: ledSpindle
+            x: 552
+            y: 2
+            width: 20
+            height: 20
+            onColor: "orange"
+            blink: true
+            value: dro.spindleEnabled
+        }
 
-            StatusGauge {
-                id: gaugeSpindle
-                width: 180
-                height: 20
-                maximumValue: 3000.0
-                value: dro.spindleSpeed
-                backgroundColor: dro.backgroundColor
-                foregroundColor: dro.foregroundColor
-            }
+        Label {
+            id: labelFeedrate
+            x: 307
+            y: 30
+            color: foregroundColor
+            font.bold: true
+            text: "Feedrate:"
+            font.pixelSize: 14
+        }
 
-            Led {
-                id: ledSpindle
-                width: 20
-                height: 20
-                onColor: "orange"
-                blink: true
-                value: dro.spindleEnabled
-            }
+        Gauge {
+            id: gaugeFeedrate
+            x: 376
+            y: 28
+            width: 170
+            height: 20
+            maximumValue: 1000.0
+            value: status.motion.feedrate * 60.0
+            backgroundColor: dro.backgroundColor
+            textColor: dro.foregroundColor
+            decimals: 0
+        }
 
-            Label {
-                id: labelFeedrate
-                color: foregroundColor
-                font.bold: true
-                text: "Feedrate:"
-            }
+        Label {
+            id: labelVelocity
+            x: 307
+            y: 56
+            color: foregroundColor
+            font.bold: true
+            text: "Velocity:"
+            font.pixelSize: 14
+        }
 
-            StatusGauge {
-                id: gaugeFeedrate
-                width: 180
-                height: 20
-                maximumValue: 1000.0
-                value: status.motion.feedrate * 60.0
-                backgroundColor: dro.backgroundColor
-                foregroundColor: dro.foregroundColor
-            }
+        Gauge {
+            id: gaugeVelocity
+            x: 376
+            y: 54
+            width: 170
+            height: 20
+            maximumValue: 1000.0
+            z0BorderValue: maximumValue/3.0
+            z1BorderValue: maximumValue*2.0/3.0
+            value: dro.currentVel
+            backgroundColor: dro.backgroundColor
+            textColor: dro.foregroundColor
+            decimals: 0
+        }
 
-            Item {
-                width: 1
-                height: 1
-            }
+        Label {
+            id: labeDoorClosed
+            x: 307
+            y: 82
+            color: foregroundColor
+            text: "Door Closed:"
+            font.pixelSize: 14
+            font.bold: true
+        }
 
-            Label {
-                id: labelVelocity
-                color: foregroundColor
-                font.bold: true
-                text: "Velocity:"
-            }
+        HalLed {
+            id: ledDoorClosed
+            x: 402
+            y: 80
+            width: 20
+            height: 20
+            onColor: "green"
+        }
 
-            StatusGauge {
-                id: gaugeVelocity
-                width: 180
-                height: 20
-                maximumValue: 1000.0
-                value: dro.currentVel
-                backgroundColor: dro.backgroundColor
-                foregroundColor: dro.foregroundColor
-            }
+        Label {
+            id: labelViceLocked
+            x: 431
+            y: 82
+            color: foregroundColor
+            text: "Vice Locked:"
+            font.pixelSize: 14
+            font.bold: true
+        }
 
-            Item {
-                width: 1
-                height: 1
-            }
-    }
+        HalLed {
+            id: ledViceLocked
+            x: 526
+            y: 82
+            width: 20
+            height: 20
+            onColor: "green"
+        }
     }
 }
