@@ -58,6 +58,7 @@ ApplicationItem {
         return basePosition
     }
 
+
     Rectangle {
         anchors.fill: parent
         color: background
@@ -85,8 +86,9 @@ ApplicationItem {
                     width: coords.width
                     title: dro.axisNames[index]
                     wc_value: dro.wc_position[dro._axisNames[index]].toFixed(3)
-                    mc_value: dro.wc_position[dro._axisNames[index]].toFixed(3)
+                    mc_value: dro.mc_position[dro._axisNames[index]].toFixed(3)
                     dtg_value: dro.dtg[dro._axisNames[index]].toFixed(3)
+                    g5x: dro.g5xNames[dro.g5xIndex-1]
                     smallFontSize: dro.smallFontSize
                     foregroundColor: dro.foregroundColor
                     backgroundColor: dro.backgroundColor

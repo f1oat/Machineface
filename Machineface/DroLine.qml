@@ -129,7 +129,7 @@ Rectangle {
 
             Label {
                 id: abs_dro
-                text: wc_value.toFixed(3)
+                text: mc_value.toFixed(3)
                 font.pixelSize: smallFontSize
                 anchors.rightMargin: -(dummySmall.width + 4)
                 anchors.right: abs_label.right
