@@ -10,56 +10,81 @@ Tab {
     id: tab
     title: qsTr("Misc")
 
-    Column {
-        anchors.fill: parent
-        anchors.margins: 10
-        spacing: 10
+    ApplicationItem {
+        id: app
+        property bool _ready: status.synced
+        property int axes: _ready ? status.config.axes : 4
+        property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
 
-        Row {
-            id: spindleMist
+        Column {
+            anchors.fill: parent
+            anchors.margins: 10
             spacing: 10
 
-            MyButton {
-                action: SpindleCcwAction { }
-            }
+            Row {
+                id: spindleMist
+                spacing: 10
 
-            MyButton {
-                action: StopSpindleAction { }
-            }
-
-            MyButton {
-                action: SpindleCwAction { }
-            }
-
-            MyButton {
-                action: MistAction { }
-            }
-
-            MyButton {
-                action: FloodAction { }
-            }
-
-            Item {
-                Layout.fillWidth: true
-            }
-        }
-
-        Row {
-            id: locks
-            spacing: 10
-
-            MyButton {
-                text: "Vice Lock"
-            }
-        }
-
-        Grid {
-            rows: 2
-            spacing: 10
-            Repeater {
-                model: ["4", "3", "2", "1"]
                 MyButton {
-                    text: "Tool #" + modelData
+                    action: SpindleCcwAction { }
+                }
+
+                MyButton {
+                    action: StopSpindleAction { }
+                }
+
+                MyButton {
+                    action: SpindleCwAction { }
+                }
+
+                MyButton {
+                    action: MistAction { }
+                }
+
+                MyButton {
+                    action: FloodAction { }
+                }
+
+                Item {
+                    Layout.fillWidth: true
+                }
+            }
+
+            Row {
+                id: touchoff
+                spacing: 10
+
+                Repeater {
+                    model: app.axes
+                    MyButton {
+                        text: "Touchoff " + app.axisNames[index]
+                        action: TouchOffAction {
+                            touchOffDialog: TouchOffDialog {
+                                axis: index
+                                height: window.height * 0.2
+                            }
+                        }
+                    }
+                }
+            }
+
+            Row {
+                id: locks
+                spacing: 10
+
+                MyButton {
+                    text: "Vice Lock"
+                }
+            }
+
+            Grid {
+                rows: 2
+                spacing: 10
+                Repeater {
+                    model: ["4", "3", "2", "1"]
+                    MyButton {
+                        text: "Tool #" + modelData
+                    }
                 }
             }
         }

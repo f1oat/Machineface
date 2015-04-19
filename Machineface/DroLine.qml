@@ -119,7 +119,6 @@ Rectangle {
                 font.pixelSize: smallFontSize
                 anchors.left: parent.left
                 anchors.leftMargin: 30
-                anchors.top: axisName.bottom
                 anchors.topMargin: 0
                 verticalAlignment: Text.AlignTop
                 color: droLine.digitsColor
