@@ -51,8 +51,6 @@
         <file>Machineface/MyButton.qml</file>
         <file>Machineface/StatusGauge.qml</file>
         <file>Machineface/StatusPanel.qml</file>
-        <file>Machineface/images/dark-metal-texture.jpg</file>
-        <file>Machineface/images/dark-metal-texture-vert.jpg</file>
         <file>Machineface/images/black-parchment-paper-texture.jpg</file>
         <file>Machineface/DroLine.qml</file>
     </qresource>
