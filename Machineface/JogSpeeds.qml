@@ -37,7 +37,7 @@ RowLayout {
 
         JogVelocityHandler {
             id: zVelocityHandler
-            axis: 1
+            axis: 2
         }
     }
 
