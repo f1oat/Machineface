@@ -53,5 +53,6 @@
         <file>Machineface/StatusPanel.qml</file>
         <file>Machineface/images/black-parchment-paper-texture.jpg</file>
         <file>Machineface/DroLine.qml</file>
+        <file>Machineface/MyTouchOffDialog.qml</file>
     </qresource>
 </RCC>

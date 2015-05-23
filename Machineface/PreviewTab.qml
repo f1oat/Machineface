@@ -37,6 +37,11 @@ Tab {
                 Layout.fillHeight: true
                 Layout.preferredWidth: height * 0.1
                 visible: pathView.visible
+                Rectangle {
+                    width: parent.width
+                    height: parent.height
+                    color: "white"
+                }
 
                 ColumnLayout {
                     id: viewModeLayout

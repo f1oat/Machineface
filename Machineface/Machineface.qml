@@ -73,6 +73,7 @@ ServiceWindow {
         }
 
         StatusPanel {
+            id: statusPanel
             foregroundColor: MyStyle.foregroundColor
             backgroundColor: MyStyle.backgroundColor
             background: "transparent"
@@ -105,7 +106,10 @@ ServiceWindow {
                        }
 
             JogControlTab {}
-            MiscTab {}
+            MiscTab {
+                tool_number: statusPanel.tool_number
+                vise_locked: statusPanel.vise_locked
+            }
             MdiTab {}
             GCodeTab {}
             PreviewTab {}

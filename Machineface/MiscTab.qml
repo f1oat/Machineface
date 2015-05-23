@@ -9,6 +9,8 @@ import "."
 Tab {
     id: tab
     title: qsTr("Misc")
+    property int tool_number: 0
+    property bool vise_locked: false
 
     ApplicationItem {
         id: app
@@ -59,7 +61,7 @@ Tab {
                     MyButton {
                         text: "Touchoff " + app.axisNames[index]
                         action: TouchOffAction {
-                            touchOffDialog: TouchOffDialog {
+                            touchOffDialog: MyTouchOffDialog {
                                 axis: index
                                 height: window.height * 0.2
                             }
@@ -73,7 +75,12 @@ Tab {
                 spacing: 10
 
                 MyButton {
-                    text: "Vice Lock"
+                    text: "Vise Lock"
+                    checked: vise_locked
+                    onClicked: {
+                        myAction.mdiCommand = vise_locked ? "M103": "M104"
+                        myAction.trigger()
+                    }
                 }
             }
 
@@ -81,12 +88,23 @@ Tab {
                 rows: 2
                 spacing: 10
                 Repeater {
-                    model: ["4", "3", "2", "1"]
+                    model: ["4", "2", "0", "3", "1"]
                     MyButton {
-                        text: "Tool #" + modelData
+                        text: modelData == 0 ? "Tool Unload" : "Tool #" + modelData
+                        onClicked: {
+                            myAction.mdiCommand = "T" + modelData + " M6"
+                            myAction.trigger()
+                        }
+                        checked: tool_number == modelData
                     }
                 }
             }
+
+            MdiCommandAction {
+                id: myAction
+                enableHistory: false
+            }
         }
     }
+
 }

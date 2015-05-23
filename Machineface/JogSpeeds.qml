@@ -18,7 +18,7 @@ RowLayout {
         stepSize: 1
         enabled: xVelocityHandler.enabled
         minimumValue: xVelocityHandler.minimumValue
-        maximumValue: 14 //xVelocityHandler.maximumValue
+        maximumValue: xVelocityHandler.status.config.maxLinearVelocity //xVelocityHandler.maximumValue
 
         Binding { target: xVelocitySpin; property: "value"; value: xVelocityHandler.value }
         Binding { target: xVelocityHandler; property: "value"; value: xVelocitySpin.value }
