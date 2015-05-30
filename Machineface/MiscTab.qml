@@ -2,9 +2,9 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
+import QtQuick.Dialogs 1.2
 import Machinekit.Application 1.0
 import Machinekit.Application.Controls 1.0
-import "."
 
 Tab {
     id: tab
@@ -18,6 +18,10 @@ Tab {
         property int axes: _ready ? status.config.axes : 4
         property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
 
+        MyTouchOffDialog {
+            id: myTouchOffDialog
+        }
+
         Column {
             anchors.fill: parent
             anchors.margins: 10
@@ -26,10 +30,6 @@ Tab {
             Row {
                 id: spindleMist
                 spacing: 10
-
-                MyButton {
-                    action: SpindleCcwAction { }
-                }
 
                 MyButton {
                     action: StopSpindleAction { }
@@ -41,10 +41,6 @@ Tab {
 
                 MyButton {
                     action: MistAction { }
-                }
-
-                MyButton {
-                    action: FloodAction { }
                 }
 
                 Item {
@@ -60,11 +56,9 @@ Tab {
                     model: app.axes
                     MyButton {
                         text: "Touchoff " + app.axisNames[index]
-                        action: TouchOffAction {
-                            touchOffDialog: MyTouchOffDialog {
-                                axis: index
-                                height: window.height * 0.2
-                            }
+                        onClicked: {
+                            myTouchOffDialog.axis = index
+                            myTouchOffDialog.open()
                         }
                     }
                 }

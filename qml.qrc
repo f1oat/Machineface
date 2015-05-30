@@ -54,5 +54,7 @@
         <file>Machineface/images/black-parchment-paper-texture.jpg</file>
         <file>Machineface/DroLine.qml</file>
         <file>Machineface/MyTouchOffDialog.qml</file>
+        <file>Machineface/CNC_Keypad.qml</file>
+        <file>Machineface/MyTouchOffAction.qml</file>
     </qresource>
 </RCC>

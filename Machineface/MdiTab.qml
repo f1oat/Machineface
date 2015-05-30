@@ -9,19 +9,34 @@ Tab {
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: Screen.pixelDensity * 1
-        MdiHistoryTable {
-            Layout.fillHeight: true
-            Layout.fillWidth: true
-            onCommandSelected: {
-                mdiCommandEdit.text = command
+
+        RowLayout {
+            MdiHistoryTable {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                onCommandSelected: {
+                    mdiCommandEdit.text = command
+                }
+
+                onCommandTriggered: {
+                    mdiCommandEdit.text = command
+                    mdiCommandEdit.action.trigger()
+                }
             }
 
-            onCommandTriggered: {
-                mdiCommandEdit.text = command
-                mdiCommandEdit.action.trigger()
+            CNC_Keypad {
+                width: 300
+                Layout.fillHeight: true
+                onKeyPressed: {
+                    if (k != "Back") {
+                        mdiCommandEdit.text += k
+                    }
+                    else {
+                        mdiCommandEdit.text = mdiCommandEdit.text.slice(0, -1)
+                    }
+                }
             }
         }
-
         MdiCommandEdit {
             Layout.fillWidth: true
             id: mdiCommandEdit

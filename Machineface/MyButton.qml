@@ -2,13 +2,13 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
-import Machinekit.Application 1.0
-import Machinekit.Application.Controls 1.0
 import QtQuick.Controls.Styles 1.3
 import "."
 
 Button {
     id: button
+    property int pixelSize: 14
+    property color textColor: MyStyle.foregroundColor
 
     style: ButtonStyle {
         background: Rectangle {
@@ -27,7 +27,8 @@ Button {
                 anchors.horizontalCenter: parent.horizontalCenter
                 text: control.text
                 font.bold: true
-                color: MyStyle.foregroundColor
+                font.pixelSize: button.pixelSize
+                color: button.textColor
             }
         }
     }
