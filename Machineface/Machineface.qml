@@ -23,9 +23,12 @@ import QtQuick 2.0
 import QtQuick.Controls 1.1
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
-import Machinekit.Controls 1.0
 import Machinekit.Application 1.0
 import Machinekit.Application.Controls 1.0
+import Machinekit.Controls 1.0
+import Machinekit.HalRemote 1.0
+import Machinekit.HalRemote.Controls 1.0
+import Machinekit.Service 1.0
 import Machinekit.PathView 1.0
 import QtQuick.Controls.Styles 1.3
 import "."
@@ -63,8 +66,30 @@ ServiceWindow {
         id: applicationFileDialog
     }
 
+    Service {
+        id: halrcompService
+        type: "halrcomp"
+    }
+
+    Service {
+        id: halrcmdService
+        type: "halrcmd"
+    }
+
+    HalRemoteComponent {
+        id: halRemoteComponent
+        halrcmdUri: halrcmdService.uri
+        halrcompUri: halrcompService.uri
+        ready: (halrcmdService.ready && halrcompService.ready) || connected
+        name: "control"
+        containerItem: container
+        create: false
+        onErrorStringChanged: console.log(errorString)
+    }
+
     ColumnLayout {
         width: window.width
+        id: container
 
         ApplicationToolBar {
             id: toolBar
@@ -107,8 +132,9 @@ ServiceWindow {
 
             JogControlTab {}
             MiscTab {
-                tool_number: statusPanel.tool_number
-                vise_locked: statusPanel.vise_locked
+                pin_safety_disable: statusPanel._pin_safety_disable
+                pin_tool_number: statusPanel._pin_tool_number
+                pin_vise_locked_led: statusPanel._pin_vise_locked_led
             }
             MdiTab {}
             GCodeTab {}
@@ -125,7 +151,6 @@ ServiceWindow {
             width: parent.width
             anchors.margins: Screen.pixelDensity
         }
-
     }
 
     ApplicationNotifications {

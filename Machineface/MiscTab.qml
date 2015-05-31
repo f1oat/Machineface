@@ -5,18 +5,20 @@ import QtQuick.Window 2.0
 import QtQuick.Dialogs 1.2
 import Machinekit.Application 1.0
 import Machinekit.Application.Controls 1.0
+import Machinekit.Controls 1.0
+import Machinekit.HalRemote 1.0
+import Machinekit.HalRemote.Controls 1.0
+import Machinekit.Service 1.0
 
 Tab {
     id: tab
     title: qsTr("Misc")
-    property int tool_number: 0
-    property bool vise_locked: false
+    property HalPin pin_tool_number
+    property HalPin pin_vise_locked_led
+    property HalPin pin_safety_disable
 
     ApplicationItem {
         id: app
-        property bool _ready: status.synced
-        property int axes: _ready ? status.config.axes : 4
-        property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
 
         MyTouchOffDialog {
             id: myTouchOffDialog
@@ -70,10 +72,20 @@ Tab {
 
                 MyButton {
                     text: "Vise Lock"
-                    checked: vise_locked
+                    checked: pin_vise_locked_led.value
                     onClicked: {
-                        myAction.mdiCommand = vise_locked ? "M103": "M104"
+                        myAction.mdiCommand = checked ? "M103": "M104"
                         myAction.trigger()
+                    }
+                }
+
+                MyButton {
+                    id: _safety_button
+                    text: "No Safety"
+                    pressed_color: "red"
+                    checked: pin_safety_disable.value
+                    onClicked: {
+                        pin_safety_disable.value = !pin_safety_disable.value
                     }
                 }
             }
@@ -89,7 +101,7 @@ Tab {
                             myAction.mdiCommand = "T" + modelData + " M6"
                             myAction.trigger()
                         }
-                        checked: tool_number == modelData
+                        checked: pin_tool_number.value == modelData
                     }
                 }
             }
@@ -100,5 +112,4 @@ Tab {
             }
         }
     }
-
 }

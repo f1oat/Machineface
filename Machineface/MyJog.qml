@@ -21,34 +21,10 @@ ApplicationItem {
     property var axisColors: ["#F5A9A9", "#A9F5F2", "#81F781", "#D2B48C"]
     property color allColor: "#DDD"
     property var axisNames: ["X", "Y", "Z", "A"]
-    property string eName: "E"
-    property string eUnits: "mm/s"
     property bool zVisible: status.synced ? status.config.axes > 2 : true
     property bool aVisible: status.synced ? status.config.axes > 3 : true
-    property bool eVisible: halRemoteComponent.connected
 
     id: root
-
-    Service {
-        id: halrcompService
-        type: "halrcomp"
-    }
-
-    Service {
-        id: halrcmdService
-        type: "halrcmd"
-    }
-
-    HalRemoteComponent {
-        id: halRemoteComponent
-        halrcmdUri: halrcmdService.uri
-        halrcompUri: halrcompService.uri
-        ready: (halrcmdService.ready && halrcompService.ready) || connected
-        name: "fdm-ve-jog"
-        containerItem: extruderControl
-        create: false
-        onErrorStringChanged: console.log(errorString)
-    }
 
     ColumnLayout {
         anchors.fill: parent
@@ -275,125 +251,6 @@ ApplicationItem {
                 }
 
               }
-            Item {
-                property int axisIndex: status.synced ? status.config.axes : 0
-                property double extruderVelocity: 5.0
-
-                id: extruderControl
-                anchors.left: axisRowLayout.right
-                anchors.bottom: parent.bottom
-                anchors.top: parent.top
-                anchors.leftMargin: parent.height * 0.03
-                width: parent.height * 0.20
-                visible: eVisible
-
-                HalPin {
-                    id: jogVelocityPin
-                    name: "velocity"
-                    direction: HalPin.IO
-                    type: HalPin.Float
-                }
-
-                HalPin {
-                    id: jogDistancePin
-                    name: "distance"
-                    direction: HalPin.IO
-                    type: HalPin.Float
-                }
-
-                HalPin {
-                    id: jogDirectionPin
-                    name: "direction"
-                    direction: HalPin.IO
-                    type: HalPin.Bit
-                }
-
-                HalPin {
-                    id: jogTriggerPin
-                    name: "trigger"
-                    direction: HalPin.IO
-                    type: HalPin.Bit
-                }
-
-                HalPin {
-                    id: jogContinousPin
-                    name: "continous"
-                    direction: HalPin.Out
-                    type: HalPin.Bit
-                }
-
-                HalPin {
-                    id: jogDtgPin
-                    name: "dtg"
-                    direction: HalPin.In
-                    type: HalPin.Float
-                }
-
-                HalPin {
-                    id: jogMaxVelocityPin
-                    name: "max-velocity"
-                    direction: HalPin.In
-                    type: HalPin.Float
-                }
-
-                Label {
-                    anchors.centerIn: parent
-                    text: eName
-                    font.bold: true
-                }
-
-                ColumnLayout {
-                    id: extruderTopLayout
-                    anchors.top: parent.top
-                    anchors.left: parent.left
-                    height: parent.height / (numberModel.length*2+1) * numberModel.length
-                    width: parent.width
-                    spacing: 0
-
-                    Repeater {
-                        model: numberModelReverse
-                        ExtruderJogButton {
-                            Layout.preferredWidth: extruderBottomLayout.height / numberModel.length * ((numberModel.length - index - 1) * 0.2 + 1)
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            distance: numberModelReverse[index] === "∞" ? 0 : numberModelReverse[index]
-                            direction: true
-                            enabled: homeXButton.enabled
-                            text: "-" + numberModelReverse[index]
-                            style: CustomStyle {
-                                baseColor: axisColors[extruderControl.axisIndex];
-                                darkness: (numberModel.length-index-1)*0.06 }
-                        }
-                    }
-                }
-
-                ColumnLayout {
-                    id: extruderBottomLayout
-                    anchors.bottom: parent.bottom
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    height: parent.height / (numberModel.length*2+1) * numberModel.length
-                    width: parent.width
-                    spacing: 0
-
-                    Repeater {
-                        model: numberModel
-                        ExtruderJogButton {
-                            Layout.preferredWidth: extruderBottomLayout.height / numberModel.length * (index*0.2+1)
-                            Layout.fillHeight: true
-                            Layout.alignment: Qt.AlignHCenter
-                            distance: numberModel[index] === "∞" ? 0 : numberModel[index]
-                            direction: false
-                            enabled: homeXButton.enabled
-                            text: numberModel[index]
-                            style: CustomStyle {
-                                baseColor: axisColors[extruderControl.axisIndex];
-                                darkness: index*0.06
-                            }
-                        }
-                    }
-                }
-            }
-
         }
         Item {
             Layout.fillHeight: true
