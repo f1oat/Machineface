@@ -19,6 +19,9 @@ Tab {
 
     ApplicationItem {
         id: app
+        property bool _ready: status.synced
+        property int axes: _ready ? status.config.axes : 4
+        property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
 
         MyTouchOffDialog {
             id: myTouchOffDialog
