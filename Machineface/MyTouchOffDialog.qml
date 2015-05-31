@@ -94,7 +94,7 @@ Dialog {
                          "4:0", "5:0", "6:0",
                          "1:0", "2:0", "3:0",
                          "0:0", ".:0", "-:0",
-                         "Ok:2", "Cancel:1", "Back:3"]
+                         "Back:3", "Cancel:1", "Ok:2"]
 
                     onKeyPressed: {
                         switch (k) {
