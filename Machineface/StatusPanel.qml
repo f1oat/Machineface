@@ -66,6 +66,10 @@ ApplicationItem {
         return basePosition
     }
 
+    function min(a, b) {
+        return a < b ? a : b
+    }
+
     Rectangle {
         id: container
         anchors.fill: parent
@@ -310,6 +314,7 @@ ApplicationItem {
         Grid {
             x: 310
             y: 8
+            spacing: 1
             columns: 2
 
             Label {
@@ -320,17 +325,24 @@ ApplicationItem {
                 font.pixelSize: 14
             }
 
-            HalGauge {
+            Gauge {
                 id: gaugeSpindle
-                name: "spindle-speed"
                 width: 170
                 height: 20
                 maximumValue: 3000.0
-                z0BorderValue: maximumValue/3.0
-                z1BorderValue: maximumValue*2.0/3.0
+                z0BorderValue: 1e9
+                z1BorderValue: 1e9
                 backgroundColor: statusPanel.backgroundColor
                 textColor: statusPanel.foregroundColor
+                value: min(pin.value, maximumValue)
                 decimals: 0
+
+                HalPin {
+                    id: pin
+                    name: "spindle-speed"
+                    type: HalPin.Float
+                    direction: HalPin.In
+                }
             }
 
             Label {
@@ -346,8 +358,8 @@ ApplicationItem {
                 width: 170
                 height: 20
                 maximumValue: status.config.maxLinearVelocity * 60.0
-                z0BorderValue: maximumValue/3.0
-                z1BorderValue: maximumValue*2.0/3.0
+                z0BorderValue: 1e9
+                z1BorderValue: 1e9
                 value: 0 //status.motion.feedrate * 60.0
                 backgroundColor: statusPanel.backgroundColor
                 textColor: statusPanel.foregroundColor
@@ -367,10 +379,11 @@ ApplicationItem {
                 width: 170
                 height: 20
                 z: 1
+                minimumValue: 0
                 maximumValue: status.config.maxLinearVelocity * 60.0
-                z0BorderValue: maximumValue/3.0
-                z1BorderValue: maximumValue*2.0/3.0
-                value: statusPanel.currentVel
+                z0BorderValue: 1e9
+                z1BorderValue: 1e9
+                value: min(statusPanel.currentVel, maximumValue)
                 backgroundColor: statusPanel.backgroundColor
                 textColor: statusPanel.foregroundColor
                 decimals: 0

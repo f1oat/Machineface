@@ -143,14 +143,6 @@ ServiceWindow {
             //ExtrasTab {}
             SettingsTab {}
         }
-
-        ApplicationProgressBar {
-            id: applicationProgressBar
-            anchors.right: parent.right
-            anchors.bottom: parent.bottom
-            width: parent.width
-            anchors.margins: Screen.pixelDensity
-        }
     }
 
     MyApplicationNotifications {
