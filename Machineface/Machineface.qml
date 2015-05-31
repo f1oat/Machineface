@@ -153,7 +153,7 @@ ServiceWindow {
         }
     }
 
-    ApplicationNotifications {
+    MyApplicationNotifications {
         id: applicationNotifications
         anchors.right: parent.right
         anchors.bottom: parent.bottom

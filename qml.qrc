@@ -56,5 +56,6 @@
         <file>Machineface/MyTouchOffDialog.qml</file>
         <file>Machineface/CNC_Keypad.qml</file>
         <file>Machineface/MyTouchOffAction.qml</file>
+        <file>Machineface/MyApplicationNotifications.qml</file>
     </qresource>
 </RCC>

@@ -348,11 +348,10 @@ ApplicationItem {
                 maximumValue: status.config.maxLinearVelocity * 60.0
                 z0BorderValue: maximumValue/3.0
                 z1BorderValue: maximumValue*2.0/3.0
-                value: status.motion.feedrate * 60.0
+                value: 0 //status.motion.feedrate * 60.0
                 backgroundColor: statusPanel.backgroundColor
                 textColor: statusPanel.foregroundColor
                 decimals: 0
-                visible: false
             }
 
             Label {
