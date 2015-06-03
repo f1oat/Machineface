@@ -13,7 +13,8 @@ import Machinekit.Service 1.0
 Tab {
     id: tab
     title: qsTr("Misc")
-    property HalPin pin_tool_number
+    property int tool_number
+    property HalPin pin_vise_lock
     property HalPin pin_vise_locked_led
     property HalPin pin_safety_disable
 
@@ -77,8 +78,7 @@ Tab {
                     text: "Vise Lock"
                     checked: pin_vise_locked_led.value
                     onClicked: {
-                        myAction.mdiCommand = checked ? "M103": "M104"
-                        myAction.trigger()
+                        pin_vise_lock.value = !pin_vise_locked_led.value
                     }
                 }
 
@@ -91,6 +91,17 @@ Tab {
                         pin_safety_disable.value = !pin_safety_disable.value
                     }
                 }
+
+                MyButton {
+                    text: "Debug"
+                    onClicked: {
+                        console.log(status.interp.gcodes)
+                        console.log(status.interp.mcodes)
+                        console.log(status.interp.settings)
+                        console.log(status.io.toolTable[0].id)
+                    }
+                }
+
             }
 
             Grid {
@@ -104,7 +115,7 @@ Tab {
                             myAction.mdiCommand = "T" + modelData + " M6"
                             myAction.trigger()
                         }
-                        checked: pin_tool_number.value == modelData
+                        checked: tool_number == modelData
                     }
                 }
             }

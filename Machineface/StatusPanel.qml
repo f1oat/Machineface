@@ -37,15 +37,20 @@ ApplicationItem {
     property double _timeFactor: (_ready && (status.config.timeUnits === ApplicationStatus.TimeUnitsMinute)) ? 60 : 1
     property double spindleSpeed: _ready ? status.motion.spindleSpeed : 0.0
     property double spindleEnabled: _ready ? status.motion.spindleEnabled : false
-    property int tool_number: (_ready && status.io.toolInSpindle &&  pin_tool_number.value >0) ? pin_tool_number.value : 0
     property bool vise_locked: ledViseLocked.value
+
+    property double real_feedrate: _ready ? status.interp.settings[1] * status.motion.feedrate : 0
+    property double real_spindlerate: _ready ? status.interp.settings[2] * status.motion.spindlerate : 0
 
     property int bigFontSize: 24
     property int smallFontSize: 12
 
-    property HalPin _pin_tool_number: pin_tool_number
-    property HalPin _pin_vise_locked_led: ledViseLocked.halPin
-    property HalPin _pin_safety_disable: pin_safety_disable
+    property alias _pin_vise_locked_led: ledViseLocked.halPin
+    property alias _pin_safety_disable: pin_safety_disable
+    property alias _pin_vise_lock: pin_vise_lock
+
+    property var tool_in_spindle: status.io.toolTable[0]
+    property int tool_number: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.id : 0
 
     function getPosition(workpiece_coordinates) {
         var basePosition
@@ -82,13 +87,6 @@ ApplicationItem {
         enabled:  halRemoteComponent.ready //.connected
 
         HalPin {
-            id: pin_tool_number
-            name: "tool-number"
-            type: HalPin.S32
-            direction: HalPin.In
-        }
-
-        HalPin {
             id: pin_spindle_at_speed
             name: "spindle-at-speed"
             type: HalPin.Bit
@@ -98,6 +96,13 @@ ApplicationItem {
         HalPin {
             id: pin_safety_disable
             name: "safety-disable"
+            type: HalPin.Bit
+            direction: HalPin.Out
+        }
+
+        HalPin {
+            id: pin_vise_lock
+            name: "vise-lock"
             type: HalPin.Bit
             direction: HalPin.Out
         }
@@ -139,16 +144,16 @@ ApplicationItem {
             y: 8
             width: 20
             height: 20
-            onColor: pin_spindle_at_speed.value ? "orange" : "red"
-            blink: true
-            blinkInterval: pin_spindle_at_speed.value ? 250 : 0
+            onColor: "orange"
+            blink: !pin_spindle_at_speed.value
+            blinkInterval: 150
             value: statusPanel.spindleEnabled
         }
 
         Rectangle {
             x: 307
             y: 82
-            width: 130
+            width: 135
             height: 95
             color: "#00000000"
             radius: 5
@@ -167,7 +172,7 @@ ApplicationItem {
             height: 83
             spacing: 1
             columns: 4
-            columnSpacing: 10
+            columnSpacing: 15
 
             Label {
                 id: labeDoorClosed
@@ -195,7 +200,8 @@ ApplicationItem {
 
             HalLed {
                 id: ledDoorLocked
-                name: "door-locked-led"
+                name: "door-unlocked-led"
+                invert: true
                 width: 20
                 height: 20
                 onColor: "green"
@@ -346,27 +352,6 @@ ApplicationItem {
             }
 
             Label {
-                id: labelFeedrate
-                color: foregroundColor
-                font.bold: true
-                text: "Feedrate:"
-                font.pixelSize: 14
-            }
-
-            Gauge {
-                id: gaugeFeedrate
-                width: 170
-                height: 20
-                maximumValue: status.config.maxLinearVelocity * 60.0
-                z0BorderValue: 1e9
-                z1BorderValue: 1e9
-                value: 0 //status.motion.feedrate * 60.0
-                backgroundColor: statusPanel.backgroundColor
-                textColor: statusPanel.foregroundColor
-                decimals: 0
-            }
-
-            Label {
                 id: labelVelocity
                 color: foregroundColor
                 font.bold: true
@@ -387,6 +372,27 @@ ApplicationItem {
                 backgroundColor: statusPanel.backgroundColor
                 textColor: statusPanel.foregroundColor
                 decimals: 0
+            }
+        }
+
+        Row {
+            x: 312
+            y: 55
+            spacing: 20
+            Label {
+                id: labelFeedrate
+                color: foregroundColor
+                font.bold: true
+                text: "F " + real_feedrate
+                font.pixelSize: 20
+            }
+
+            Label {
+                id: labelSpindlerate
+                color: foregroundColor
+                font.bold: true
+                text: "S " + real_spindlerate
+                font.pixelSize: 20
             }
 
         }

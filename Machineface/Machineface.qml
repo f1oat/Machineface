@@ -133,7 +133,8 @@ ServiceWindow {
             JogControlTab {}
             MiscTab {
                 pin_safety_disable: statusPanel._pin_safety_disable
-                pin_tool_number: statusPanel._pin_tool_number
+                tool_number: statusPanel.tool_number
+                pin_vise_lock: statusPanel._pin_vise_lock
                 pin_vise_locked_led: statusPanel._pin_vise_locked_led
             }
             MdiTab {}
