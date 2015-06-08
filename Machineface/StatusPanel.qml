@@ -154,14 +154,13 @@ ApplicationItem {
             x: 307
             y: 82
             width: 135
-            height: 95
+            height: 73
             color: "#00000000"
             radius: 5
             border.width: 3
             property bool ok: ledDoorClosed.value
                               && ledViseLocked.value
                               && ledPressureOK.value
-                              && !ledToolUnLocked.value
             border.color: ok ? "green" : "red"
         }
 
@@ -223,8 +222,22 @@ ApplicationItem {
                 onColor: "green"
             }
 
-            Label { text: "--"}
-            Label { text: "--"}
+            Label {
+                id: labelToolLocked
+                color: foregroundColor
+                text: "Tool Locked:"
+                font.pixelSize: 14
+                font.bold: true
+            }
+
+            HalLed {
+                id: ledToolUnLocked
+                name: "tool-unlocked-led"
+                onColor: "green"
+                invert: true
+                width: 20
+                height: 20
+            }
 
             Label {
                 id: labelPressureOK
@@ -242,7 +255,6 @@ ApplicationItem {
                 height: 20
             }
 
-
             Label {
                 id: labelMistOn
                 color: foregroundColor
@@ -259,22 +271,8 @@ ApplicationItem {
                 height: 20
             }
 
-            Label {
-                id: labelToolLocked
-                color: foregroundColor
-                text: "Tool Locked:"
-                font.pixelSize: 14
-                font.bold: true
-            }
-
-            HalLed {
-                id: ledToolUnLocked
-                name: "tool-unlocked-led"
-                onColor: "green"
-                invert: true
-                width: 20
-                height: 20
-            }
+            Label { text: "--"}
+            Label { text: "--"}
 
             Label {
                 id: labelCurrentTool
