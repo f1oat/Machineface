@@ -19,15 +19,28 @@ RowLayout {
         enabled: xVelocityHandler.enabled
         minimumValue: xVelocityHandler.minimumValue
         maximumValue: xVelocityHandler.status.config.maxLinearVelocity //xVelocityHandler.maximumValue
+        property double oldValue: 0
 
-        Binding { target: xVelocitySpin; property: "value"; value: xVelocityHandler.value }
-        Binding { target: xVelocityHandler; property: "value"; value: xVelocitySpin.value }
-        Binding { target: yVelocityHandler; property: "value"; value: xVelocitySpin.value }
-        Binding { target: zVelocityHandler; property: "value"; value: xVelocitySpin.value }
+        onValueChanged: {
+            if (value != oldValue) {
+                xVelocityHandler.value = value
+                yVelocityHandler.value = value
+                zVelocityHandler.value = value
+                oldValue = value
+            }
+        }
 
         JogVelocityHandler {
             id: xVelocityHandler
             axis: 0
+            property double oldValue: 0
+
+            onValueChanged: {
+                if (value != oldValue) {
+                    xVelocitySpin.value = value
+                    oldValue = value
+                }
+            }
         }
 
         JogVelocityHandler {
