@@ -112,7 +112,7 @@ Tab {
                     MyButton {
                         text: modelData == 0 ? "Tool Unload" : "Tool #" + modelData
                         onClicked: {
-                            myAction.mdiCommand = "T" + modelData + " M6"
+                            myAction.mdiCommand = "T" + modelData + " M6 G43"
                             myAction.trigger()
                         }
                         checked: tool_number == modelData
