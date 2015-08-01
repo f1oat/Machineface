@@ -62,8 +62,15 @@ ServiceWindow {
         id: pathViewCore
     }
 
-    ApplicationFileDialog {
+    ApplicationRemoteFileDialog {
         id: applicationFileDialog
+        width: window.width
+        height: window.height
+        fileDialog: fileDialog
+    }
+
+    ApplicationFileDialog {
+        id: fileDialog
     }
 
     Service {
