@@ -30,7 +30,7 @@ RowLayout {
             }
         }
 
-        JogVelocityHandler {
+        MyJogVelocityHandler {
             id: xVelocityHandler
             axis: 0
             property double oldValue: 0
@@ -43,12 +43,12 @@ RowLayout {
             }
         }
 
-        JogVelocityHandler {
+        MyJogVelocityHandler {
             id: yVelocityHandler
             axis: 1
         }
 
-        JogVelocityHandler {
+        MyJogVelocityHandler {
             id: zVelocityHandler
             axis: 2
         }
