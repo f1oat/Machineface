@@ -51,6 +51,7 @@ ApplicationItem {
 
     property var tool_in_spindle: status.io.toolTable[0]
     property int tool_number: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.id : 0
+    property double tool_length: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.zOffset : 0
 
     function getPosition(workpiece_coordinates) {
         var basePosition
@@ -169,7 +170,7 @@ ApplicationItem {
             y: 88
             width: 234
             height: 83
-            spacing: 1
+            spacing: 3
             columns: 4
             columnSpacing: 15
 
@@ -271,9 +272,6 @@ ApplicationItem {
                 height: 20
             }
 
-            Label { text: "--"}
-            Label { text: "--"}
-
             Label {
                 id: labelCurrentTool
                 color: foregroundColor
@@ -285,10 +283,26 @@ ApplicationItem {
             Label {
                 id: labelToolNumber
                 color: statusPanel.foregroundColor
-                text: tool_number ? tool_number : "None"
+                text: tool_number ? tool_number : "-"
                 font.pixelSize: 14
                 font.bold: true
 
+            }
+
+            Label {
+                id: labelToolLength
+                color: foregroundColor
+                text: "Length:"
+                font.pixelSize: 14
+                font.bold: true
+            }
+
+            Label {
+                id: labelToolLength2
+                color: statusPanel.foregroundColor
+                text: tool_length.toFixed(2)
+                font.pixelSize: 14
+                font.bold: true
             }
         }
 
