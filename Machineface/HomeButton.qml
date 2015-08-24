@@ -14,6 +14,6 @@ Button {
     action: HomeAxisAction { id: homeAction; axis: root.axis }
     text: axisName
     style: CustomStyle { baseColor: color; textColor: !homeAction.homed ? systemPalette.text : "gray" }
-    iconSource: !homeAction.homed ? "icons/ic_home_black_48dp.png" : "icons/ic_home_grey600_48dp.png"
+    iconSource: !homeAction.homed ? "icons/ic_home_red_48dp.png" : "icons/ic_home_green_48dp.png"
 }
 
