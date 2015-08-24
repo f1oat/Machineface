@@ -58,5 +58,7 @@
         <file>Machineface/MyTouchOffAction.qml</file>
         <file>Machineface/MyApplicationNotifications.qml</file>
         <file>Machineface/MyJogVelocityHandler.qml</file>
+        <file>Machineface/icons/ic_home_red_48dp.png</file>
+        <file>Machineface/icons/ic_home_green_48dp.png</file>
     </qresource>
 </RCC>
