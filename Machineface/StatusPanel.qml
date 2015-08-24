@@ -304,6 +304,22 @@ ApplicationItem {
                 font.pixelSize: 14
                 font.bold: true
             }
+
+            Label {
+                id: labelProbe
+                color: foregroundColor
+                text: "Probe:"
+                font.pixelSize: 14
+                font.bold: true
+            }
+
+            HalLed {
+                id: ledProbe
+                name: "probe-led"
+                onColor: "orange"
+                width: 20
+                height: 20
+            }
         }
 
         Rectangle {
