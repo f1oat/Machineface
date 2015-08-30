@@ -331,6 +331,11 @@ ApplicationItem {
             color: "#e99e08"
             visible: pin_safety_disable.value
 
+            Timer {
+                interval: 250; running: true; repeat: true
+                onTriggered: safety_disabled_indicator.visible = pin_safety_disable.value ? !safety_disabled_indicator.visible : false
+            }
+
             Text {
                 id: text1
                 x: 54
