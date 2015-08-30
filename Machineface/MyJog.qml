@@ -34,7 +34,7 @@ ApplicationItem {
         Item {
             id: container
             Layout.fillWidth: true
-            Layout.preferredHeight: Math.min(width / 1.2, parent.height)
+            Layout.preferredHeight: Math.min(width / 1.2, parent.height - jog_speed.height)
 
             Item {
                 id: mainItem
@@ -256,7 +256,9 @@ ApplicationItem {
             Layout.fillHeight: true
         }
 
-        JogSpeeds {}
+        JogSpeeds {
+            id: jog_speed
+        }
     }
 
 }

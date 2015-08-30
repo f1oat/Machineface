@@ -54,7 +54,7 @@ ServiceWindow {
 
     ApplicationCore {
         id: applicationCore
-        notifications: applicationNotifications
+        notifications: notificationLine
         applicationName: "Machineface"
     }
 
@@ -104,6 +104,40 @@ ServiceWindow {
             height: 70
         }
 
+        Rectangle {
+            width: parent.width
+            height: 18
+            color: "grey"
+
+            Label {
+                id: notificationLine
+                anchors.margins: 2
+                anchors.left: parent.left
+                anchors.top: parent.top
+                text: "idle"
+                color: MyStyle.foregroundColor
+                font.pixelSize: 14
+                font.bold: true
+                visible: applicationCore.status.running
+
+                function addNotification (type, str)
+                {
+                    str = str.replace(".000000", "")
+                    switch (type) {
+                    case ApplicationError.OperatorText:
+                        text = str
+                        break
+                    default:
+                        applicationNotifications.addNotification(type, str)
+                        break
+                    }
+                }
+                onVisibleChanged: {
+                    if (!visible) text = ""
+                }
+            }
+        }
+
         StatusPanel {
             id: statusPanel
             foregroundColor: MyStyle.foregroundColor
@@ -114,7 +148,7 @@ ServiceWindow {
         TabView {
             id: mainTab
             Layout.preferredWidth: window.width
-            Layout.preferredHeight: 600
+            Layout.preferredHeight: 580
             currentIndex: 0
             frameVisible: true
             transformOrigin: Item.Center
@@ -156,6 +190,7 @@ ServiceWindow {
             //ExtrasTab {}
             SettingsTab {}
         }
+
     }
 
     MyApplicationNotifications {
