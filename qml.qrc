@@ -60,5 +60,8 @@
         <file>Machineface/MyJogVelocityHandler.qml</file>
         <file>Machineface/icons/ic_home_red_48dp.png</file>
         <file>Machineface/icons/ic_home_green_48dp.png</file>
+        <file>Machineface/ToolsTab.qml</file>
+        <file>Machineface/GroupBoxStyle.qml</file>
+        <file>Machineface/MyGroupBox.qml</file>
     </qresource>
 </RCC>

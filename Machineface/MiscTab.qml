@@ -13,7 +13,6 @@ import Machinekit.Service 1.0
 Tab {
     id: tab
     title: qsTr("Misc")
-    property int tool_number
     property HalPin pin_vise_lock
     property HalPin pin_vise_locked_led
     property HalPin pin_safety_disable
@@ -34,19 +33,42 @@ Tab {
             spacing: 10
 
             Row {
-                id: spindleMist
                 spacing: 10
 
-                MyButton {
-                    action: StopSpindleAction { }
+                MyGroupBox {
+                    title: "Spindle"
+                    Row {
+                        id: spindle
+                        spacing: 10
+
+                        MyButton {
+                            action: StopSpindleAction { }
+                            text: "Spindle\nStop"
+                        }
+
+                        MyButton {
+                            action: SpindleCwAction { }
+                            text: "Spindle\nCW"
+                        }
+                    }
                 }
 
-                MyButton {
-                    action: SpindleCwAction { }
-                }
+                MyGroupBox {
+                    title: "Coolant"
 
-                MyButton {
-                    action: MistAction { }
+                    Row {
+                        id: coolant
+                        spacing: 10
+
+                        MyButton {
+                            action: MistAction { }
+                        }
+
+                        MyButton {
+                            action: FloodAction { }
+                        }
+
+                    }
                 }
 
                 Item {
@@ -54,68 +76,49 @@ Tab {
                 }
             }
 
-            Row {
+            MyGroupBox {
                 id: touchoff
-                spacing: 10
+                title: "Manual touch off"
+                Row {
+                    spacing: 10
 
-                Repeater {
-                    model: app.axes
-                    MyButton {
-                        text: "Touchoff " + app.axisNames[index]
-                        onClicked: {
-                            myTouchOffDialog.axis = index
-                            myTouchOffDialog.open()
+                    Repeater {
+                        model: app.axes
+                        MyButton {
+                            text: "Touchoff " + app.axisNames[index]
+                            onClicked: {
+                                myTouchOffDialog.axis = index
+                                myTouchOffDialog.open()
+                            }
                         }
                     }
                 }
             }
 
-            Row {
+            MyGroupBox {
                 id: locks
-                spacing: 10
+                title: "Locks"
 
-                MyButton {
-                    text: "Vise Lock"
-                    checked: pin_vise_locked_led.value
-                    onClicked: {
-                        pin_vise_lock.value = !pin_vise_locked_led.value
-                    }
-                }
+                Row {
 
-                MyButton {
-                    id: _safety_button
-                    text: "No Safety"
-                    pressed_color: "red"
-                    checked: pin_safety_disable.value
-                    onClicked: {
-                        pin_safety_disable.value = !pin_safety_disable.value
-                    }
-                }
+                    spacing: 10
 
-                MyButton {
-                    text: "Debug"
-                    onClicked: {
-                        console.log(status.interp.gcodes)
-                        console.log(status.interp.mcodes)
-                        console.log(status.interp.settings)
-                        console.log(status.io.toolTable[0].id)
-                    }
-                }
-
-            }
-
-            Grid {
-                rows: 2
-                spacing: 10
-                Repeater {
-                    model: ["4", "2", "0", "3", "1"]
                     MyButton {
-                        text: modelData == 0 ? "Tool Unload" : "Tool #" + modelData
+                        text: "Vise Lock"
+                        checked: pin_vise_locked_led.value
                         onClicked: {
-                            myAction.mdiCommand = "T" + modelData + " M6 G43"
-                            myAction.trigger()
+                            pin_vise_lock.value = !pin_vise_locked_led.value
                         }
-                        checked: tool_number == modelData
+                    }
+
+                    MyButton {
+                        id: _safety_button
+                        text: "No Safety"
+                        pressed_color: "red"
+                        checked: pin_safety_disable.value
+                        onClicked: {
+                            pin_safety_disable.value = !pin_safety_disable.value
+                        }
                     }
                 }
             }
