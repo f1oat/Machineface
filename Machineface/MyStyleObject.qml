@@ -7,5 +7,5 @@ QtObject {
     property color backgroundColor: "black"
     property color foregroundColor: "white"
     property color labelColor: "white"
-    property int buttonSize: 50
+    property int buttonSize: 100
 }
