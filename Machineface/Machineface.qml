@@ -47,6 +47,8 @@ ServiceWindow {
     visible: true
     title: applicationCore.applicationName + (d.machineName == "" ? "" : " - " + d.machineName)
 
+    ListModel { id: logModel }
+
     QtObject {
         id: d
         property string machineName: applicationCore.status.config.name
@@ -119,9 +121,13 @@ ServiceWindow {
                 font.pixelSize: 14
                 font.bold: true
                 visible: applicationCore.status.running
+                property variant filter: ["motion stopped by enable input"]
 
                 function addNotification (type, str)
                 {
+                    var f = filter.indexOf(text)
+                    if (f >= 0) return
+
                     str = str.replace(".000000", "")
                     switch (type) {
                     case ApplicationError.OperatorText:
@@ -131,6 +137,7 @@ ServiceWindow {
                         applicationNotifications.addNotification(type, str)
                         break
                     }
+                    logModel.append({"type": type, "text": text})
                 }
                 onVisibleChanged: {
                     if (!visible) text = ""
@@ -188,9 +195,21 @@ ServiceWindow {
             PreviewTab {}
             //VideoTab {}
             //ExtrasTab {}
-            SettingsTab {}
-        }
+            //SettingsTab {}
+            Tab {
+                title: qsTr("Log")
 
+                ColumnLayout {
+                    anchors.fill: parent
+                    anchors.margins: Screen.pixelDensity * 1
+
+                    LogHistory {
+                        id: logHistory
+                        model: logModel
+                    }
+                }
+            }
+        }
     }
 
     MyApplicationNotifications {
