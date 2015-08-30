@@ -26,7 +26,7 @@ import Machinekit.Application 1.0
 import QtQuick.Window 2.0
 
 ListView {
-    property int messageWidth: 100
+    property int messageWidth: 200
 
     id: root
     implicitWidth: 0
@@ -54,10 +54,10 @@ ListView {
             anchors.right: parent.right
             width: root.messageWidth
             height: textLabel.height
-            radius: Screen.logicalPixelDensity * 2
+            //radius: Screen.logicalPixelDensity * 2
             color: systemPalette.light
             border.color: systemPalette.mid
-            border.width: 1
+            border.width: 2
 
             Label {
                 id: textLabel
@@ -68,6 +68,8 @@ ListView {
                 verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
                 text: model.text
+                font.pixelSize: 14
+                font.bold: true
             }
 
             Image {
