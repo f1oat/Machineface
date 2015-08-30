@@ -13,7 +13,7 @@ Button {
 
     style: ButtonStyle {
         background: Rectangle {
-            implicitWidth: 100
+            implicitWidth: MyStyle.buttonSize
             implicitHeight: MyStyle.buttonSize
             border.width: 3
             border.color: button.checked ? pressed_color : "grey"
@@ -29,7 +29,10 @@ Button {
                 text: control.text
                 font.bold: true
                 font.pixelSize: button.pixelSize
-                color: button.textColor
+                color: enabled ? button.textColor : "grey"
+                horizontalAlignment: Text.AlignHCenter
+                verticalAlignment: Text.AlignVCenter
+                wrapMode: Text.WordWrap
             }
         }
     }
