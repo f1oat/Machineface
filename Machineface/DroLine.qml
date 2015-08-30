@@ -27,6 +27,10 @@ Rectangle {
 
     color: backgroundColor
 
+    function round(value, decimals) {
+        return Number(Math.round(value+'e'+decimals)+'e-'+decimals).toFixed(decimals);
+    }
+
     Label {
         id: dummySmall
         visible: false
@@ -63,6 +67,7 @@ Rectangle {
             anchors.rightMargin: 0
             anchors.top: parent.top
             anchors.topMargin: -4
+
             Label {
                 id: axisName
                 text: title
@@ -91,7 +96,7 @@ Rectangle {
             Label {
                 id: wc_dro
                 Layout.preferredWidth: bigFontSize * 9
-                text: wc_value.toFixed(3)
+                text: round(wc_value, 3)
                 font.pixelSize: bigFontSize
                 anchors.right: parent.right
                 anchors.rightMargin: 3
@@ -128,7 +133,7 @@ Rectangle {
 
             Label {
                 id: abs_dro
-                text: mc_value.toFixed(3)
+                text: round(mc_value, 3)
                 font.pixelSize: smallFontSize
                 anchors.rightMargin: -(dummySmall.width + 4)
                 anchors.right: abs_label.right
@@ -152,7 +157,7 @@ Rectangle {
 
             Label {
                 id: dtg_dro
-                text: dtg_value.toFixed(3)
+                text: round(dtg_value, 3)
                 font.pixelSize: smallFontSize
                 anchors.right: parent.right
                 anchors.rightMargin: 4
