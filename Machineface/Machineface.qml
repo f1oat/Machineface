@@ -125,13 +125,15 @@ ServiceWindow {
                                color: styleData.selected ? "grey" : MyStyle.backgroundColor
                                border.color:  MyStyle.foregroundColor
                                implicitWidth: Math.max(text.width + 4, 80)
-                               implicitHeight: 40
+                               implicitHeight: 70
                                radius: 2
                                Text {
                                    id: text
                                    anchors.centerIn: parent
                                    text: styleData.title
                                    color: MyStyle.foregroundColor
+                                   font.pixelSize: 14
+                                   font.bold: true
                                }
                            }
                            frame: Rectangle { color: "transparent" /*MyStyle.backgroundColor*/ }
@@ -140,14 +142,17 @@ ServiceWindow {
             JogControlTab {}
             MiscTab {
                 pin_safety_disable: statusPanel._pin_safety_disable
-                tool_number: statusPanel.tool_number
                 pin_vise_lock: statusPanel._pin_vise_lock
                 pin_vise_locked_led: statusPanel._pin_vise_locked_led
+            }
+            ToolsTab {
+                 pin_vise_locked_led: statusPanel._pin_vise_locked_led
+                 tool_number: statusPanel.tool_number
             }
             MdiTab {}
             GCodeTab {}
             PreviewTab {}
-            VideoTab {}
+            //VideoTab {}
             //ExtrasTab {}
             SettingsTab {}
         }
