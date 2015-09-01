@@ -12,6 +12,8 @@ Rectangle {
     SystemPalette { id: systemPalette }
     FontLoader { id: iconFont; source: "icons/material-icon-font.ttf" }
 
+    signal abort()
+
     RowLayout {
         id: toolBar
         anchors.fill: parent
@@ -59,6 +61,7 @@ Rectangle {
             Layout.preferredHeight: width
             action : StopProgramAction { }
             iconSource: "icons/ic_stop_white_48dp.png"
+            onClicked: abort()
         }
         TouchButton {
             Layout.fillWidth: true

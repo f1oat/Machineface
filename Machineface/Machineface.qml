@@ -189,6 +189,10 @@ ServiceWindow {
             ToolsTab {
                  pin_vise_locked_led: statusPanel._pin_vise_locked_led
                  tool_number: statusPanel.tool_number
+                 Component.onCompleted: {
+                     console.log("connect2")
+                     toolBar.abort.connect(abort)
+                 }
             }
             MdiTab {}
             GCodeTab {}

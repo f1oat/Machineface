@@ -18,6 +18,7 @@ Tab {
     property int tool_number
     property bool _ready: status.synced && command.connected
     property HalPin pin_vise_locked_led
+    signal abort
 
     ApplicationItem {
         id: app
@@ -76,11 +77,19 @@ Tab {
                                             selection.itemAt(idx).checked = false
                                         }
                                     }
-                                    myAction.mdiCommand = "o<measure-tools> call"
+                                    //myAction.mdiCommand = "o<measure-tools> call"
+                                    if (tool_number >0) toolno = tool_number
+                                    else tool_number = 1
                                     for (idx=0; idx<4; idx++) {
-                                        myAction.mdiCommand += " [" + selected_tools[idx] + "]"
+                                        if (selected_tools[toolno-1]) {
+                                            myAction.queue("T" + toolno + " M6")
+                                            myAction.queue("o<probe-tool> call")
+                                        }
+                                        toolno++
+                                        if (toolno > 4) toolno = 1
+                                        //myAction.mdiCommand += " [" + selected_tools[idx] + "]"
                                     }
-                                    myAction.trigger()
+                                    //myAction.trigger()
                                 }
                                 else {
                                     checked = !checked
@@ -91,9 +100,19 @@ Tab {
                 }
             }
 
-            MdiCommandAction {
+            Timer {
+                id: myTimer // This timer is a workaround for queuebuster issue in MDI mode
+            }
+
+            MyMdiCommandAction {
                 id: myAction
                 enableHistory: false
+                timer: myTimer
+
+                Component.onCompleted: {
+                    console.log("connect")
+                    tab.abort.connect(myAction.abort)
+                }
             }
         }
     }

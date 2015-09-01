@@ -63,5 +63,7 @@
         <file>Machineface/ToolsTab.qml</file>
         <file>Machineface/GroupBoxStyle.qml</file>
         <file>Machineface/MyGroupBox.qml</file>
+        <file>Machineface/LogHistory.qml</file>
+        <file>Machineface/MyMdiCommandAction.qml</file>
     </qresource>
 </RCC>
