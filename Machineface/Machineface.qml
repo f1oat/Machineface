@@ -125,7 +125,7 @@ ServiceWindow {
 
                 function addNotification (type, str)
                 {
-                    var f = filter.indexOf(text)
+                    var f = filter.indexOf(str)
                     if (f >= 0) return
 
                     str = str.replace(".000000", "")
@@ -134,10 +134,11 @@ ServiceWindow {
                         text = str
                         break
                     default:
-                        applicationNotifications.addNotification(type, str)
+                        mainTab.currentIndex = 6
                         break
                     }
-                    logModel.append({"type": type, "text": text})
+
+                    logModel.append({"type": type, "text": str})
                 }
                 onVisibleChanged: {
                     if (!visible) text = ""
@@ -180,13 +181,15 @@ ServiceWindow {
                            frame: Rectangle { color: "transparent" /*MyStyle.backgroundColor*/ }
                        }
 
-            JogControlTab {}
+            JogControlTab {active: true}
             MiscTab {
+                active: true
                 pin_safety_disable: statusPanel._pin_safety_disable
                 pin_vise_lock: statusPanel._pin_vise_lock
                 pin_vise_locked_led: statusPanel._pin_vise_locked_led
             }
             ToolsTab {
+                 active: true
                  pin_vise_locked_led: statusPanel._pin_vise_locked_led
                  tool_number: statusPanel.tool_number
                  Component.onCompleted: {
@@ -194,15 +197,16 @@ ServiceWindow {
                      toolBar.abort.connect(abort)
                  }
             }
-            MdiTab {}
-            GCodeTab {}
-            PreviewTab {}
+            MdiTab {active: true}
+            GCodeTab {active: true}
+            PreviewTab {active: true}
             //VideoTab {}
             //ExtrasTab {}
             //SettingsTab {}
             Tab {
+                id: logTab
                 title: qsTr("Log")
-
+                active: true
                 ColumnLayout {
                     anchors.fill: parent
                     anchors.margins: Screen.pixelDensity * 1
@@ -214,14 +218,5 @@ ServiceWindow {
                 }
             }
         }
-    }
-
-    MyApplicationNotifications {
-        id: applicationNotifications
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        anchors.top: parent.top
-        anchors.margins: Screen.pixelDensity * 3
-        messageWidth: parent.width * 0.25
     }
 }

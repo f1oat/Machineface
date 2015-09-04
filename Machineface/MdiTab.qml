@@ -110,11 +110,9 @@ Tab {
                     // Remove any identical item in the history
                     var model = history.model
                     var last = model[history.rowCount-1].command
-                    console.log("last=" + last + " " + history.rowCount)
                     var i = 0
                     while (i<history.rowCount-1) {
                         if (model[i].command == last) {
-                            console.log("delete at " + i)
                             history.history.remove(i)
                         }
                         else {
