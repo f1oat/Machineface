@@ -2,6 +2,8 @@ import QtQuick 2.0
 import QtQuick.Controls 1.2
 import QtQuick.Layouts 1.1
 import QtQuick.Window 2.0
+import QtQuick.Controls.Styles 1.1
+
 import Machinekit.Application.Controls 1.0
 
 Tab {
@@ -15,6 +17,7 @@ Tab {
                 id: history
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                backgroundVisible: false
                 onCommandSelected: {
                     mdiCommandEdit.text = command
                 }
@@ -24,6 +27,20 @@ Tab {
                 }
                 Component.onCompleted: {
                     positionViewAtRow(rowCount-1, ListView.End)
+                }
+                rowDelegate: Rectangle {
+                    height: 20
+                    width: parent.width
+                    color: styleData.alternate ? "#202020" : "black"
+                }
+                itemDelegate: Item {
+                    Text {
+                        anchors.verticalCenter: parent.verticalCenter
+                        color: "white"
+                        font.pixelSize: 14
+                        elide: styleData.elideMode
+                        text: styleData.value
+                    }
                 }
             }
 
@@ -59,6 +76,19 @@ Tab {
                 id: mdiTextField
                 Layout.fillWidth: true
                 Layout.fillHeight: true
+
+                font.pixelSize: 14
+                style: TextFieldStyle {
+                    textColor: "white"
+                    background: Rectangle {
+                        radius: 5
+                        color: "black"
+                        implicitWidth: 100
+                        implicitHeight: 24
+                        border.color: "white"
+                        border.width: 1
+                    }
+                }
 
                 onAccepted: {
                     if (text != "") {
