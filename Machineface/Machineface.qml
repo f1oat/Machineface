@@ -35,14 +35,7 @@ import "."
 
 ServiceWindow {
     id: window
-    color: "transparent" //MyStyle.backgroundColor
-
-    Image {
-        id: background
-        anchors.fill: parent
-        fillMode: Image.Stretch
-        source: "images/black-parchment-paper-texture.jpg"
-    }
+    color: MyStyle.backgroundColor
 
     visible: true
     title: applicationCore.applicationName + (d.machineName == "" ? "" : " - " + d.machineName)
@@ -108,20 +101,29 @@ ServiceWindow {
 
         Rectangle {
             width: parent.width
-            height: 18
-            color: "grey"
-
+            height: 20
+            color: "black"
+            border.color: "white"
+            border.width: 1
             Label {
                 id: notificationLine
                 anchors.margins: 2
                 anchors.left: parent.left
                 anchors.top: parent.top
                 text: "idle"
-                color: MyStyle.foregroundColor
+                color: "orange"
                 font.pixelSize: 14
                 font.bold: true
-                visible: applicationCore.status.running
+                visible: false
+
+                property bool display: applicationCore.status.running
                 property variant filter: ["motion stopped by enable input"]
+
+                Timer {
+                    id: blinker
+                    interval: 250; running: display; repeat: true
+                    onTriggered: notificationLine.visible = !notificationLine.visible
+                }
 
                 function addNotification (type, str)
                 {
@@ -140,8 +142,19 @@ ServiceWindow {
 
                     logModel.append({"type": type, "text": str})
                 }
-                onVisibleChanged: {
-                    if (!visible) text = ""
+
+                onDisplayChanged: {
+                    if (!display) {
+                        text = ""
+                        notificationLine.visible = false
+                    }
+                }
+
+                onTextChanged: {
+                    if (text != "") {
+                        notificationLine.visible = true
+                        blinker.start()
+                    }
                 }
             }
         }

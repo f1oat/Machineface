@@ -29,7 +29,7 @@ Tab {
                     positionViewAtRow(rowCount-1, ListView.End)
                 }
                 rowDelegate: Rectangle {
-                    height: 20
+                    height: 30
                     width: parent.width
                     color: styleData.alternate ? "#202020" : "black"
                 }
@@ -37,7 +37,7 @@ Tab {
                     Text {
                         anchors.verticalCenter: parent.verticalCenter
                         color: "white"
-                        font.pixelSize: 14
+                        font.pixelSize: 20
                         elide: styleData.elideMode
                         text: styleData.value
                     }
@@ -125,7 +125,8 @@ Tab {
                 }
             }
 
-            Button {
+            MyButton {
+                height: 40
                 Layout.fillHeight: true
                 Layout.fillWidth: false
                 action: mdiCommandAction
