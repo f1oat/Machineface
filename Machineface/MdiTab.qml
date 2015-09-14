@@ -18,6 +18,9 @@ Tab {
                 Layout.fillHeight: true
                 Layout.fillWidth: true
                 backgroundVisible: false
+                frameVisible: false
+                verticalScrollBarPolicy: Qt.ScrollBarAlwaysOff
+
                 onCommandSelected: {
                     mdiCommandEdit.text = command
                 }
