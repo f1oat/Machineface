@@ -17,18 +17,12 @@ ButtonStyle {
     background: Rectangle {
         implicitWidth: 100
         implicitHeight: 25
-        border.width: control.activeFocus ? 2 : 1
-        border.color: Qt.darker(baseColor, 1.1+darkness)
-        radius: Screen.pixelDensity
-        gradient: Gradient {
-            GradientStop { position: 0 ; color: (control.pressed || control.checked) ?
-                                                    Qt.darker(baseColor, 1.05+darkness) :
-                                                    Qt.darker(baseColor, 0.85+darkness) }
-            GradientStop { position: 1 ; color: (control.pressed || control.checked) ?
-                                                    Qt.darker(baseColor, 1.2+darkness) :
-                                                    Qt.darker(baseColor, 1+darkness) }
-        }
+        border.width: 3
+        border.color: button.checked ? pressed_color : "grey"
+        radius: 4
+        color: control.pressed ? "grey" : MyStyle.backgroundColor
     }
+
     label: Item {
         opacity: control.enabled ? 1.0 : 0.4
         Image {

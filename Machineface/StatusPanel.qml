@@ -348,9 +348,6 @@ ApplicationItem {
         }
 
         Grid {
-        }
-
-        Grid {
             x: 310
             y: 8
             spacing: 1

@@ -24,16 +24,24 @@ Button {
         }
 
         label: Item {
-            anchors.fill: parent
-            Text {
-                anchors.verticalCenter: parent.verticalCenter
-                anchors.horizontalCenter: parent.horizontalCenter
+            opacity: control.enabled ? 1.0 : 0.4
+            Image {
+                anchors.centerIn: parent
+                width: parent.width * 0.6
+                height: width
+                source: control.iconSource
+                smooth: true
+                sourceSize: Qt.size(width, height)
+            }
+            Label {
+                anchors.fill: parent
+                anchors.margins: parent.width * 0.06
+                horizontalAlignment: control.iconSource == "" ? "AlignHCenter" : "AlignRight"
+                verticalAlignment: control.iconSource == "" ? "AlignVCenter" : "AlignBottom"
                 text: control.text
-                font.bold: true
+                color: button.textColor
+                font.bold: control.iconSource === "" ? false : true
                 font.pixelSize: button.pixelSize
-                color: enabled ? button.textColor : "grey"
-                horizontalAlignment: Text.AlignHCenter
-                verticalAlignment: Text.AlignVCenter
                 wrapMode: Text.WordWrap
             }
         }
