@@ -98,6 +98,7 @@ ServiceWindow {
             Layout.fillWidth: true
             Layout.fillHeight: true
             //height: 70
+            Layout.preferredHeight:25
         }
 
         Rectangle {
