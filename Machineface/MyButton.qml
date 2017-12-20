@@ -10,13 +10,13 @@ Button {
     property int pixelSize: 14
     property color textColor: MyStyle.foregroundColor
     property string pressed_color: "lightgreen"
-    width: MyStyle.buttonSize
-    height: MyStyle.buttonSize
+    implicitWidth: MyStyle.buttonSize
+    implicitHeight: MyStyle.buttonSize*0.7
 
     style: ButtonStyle {
         background: Rectangle {
-            implicitWidth: parent.width
-            implicitHeight: parent.height
+            //implicitWidth: parent.width
+            //implicitHeight: parent.height
             border.width: 3
             border.color: button.checked ? pressed_color : "grey"
             radius: 4

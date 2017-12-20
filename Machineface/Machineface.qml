@@ -90,17 +90,18 @@ ServiceWindow {
     }
 
     ColumnLayout {
-        width: window.width
+        anchors.fill: parent
         id: container
 
         ApplicationToolBar {
             id: toolBar
-            width: window.width
-            height: 70
+            Layout.fillWidth: true
+            Layout.fillHeight: true
+            //height: 70
         }
 
         Rectangle {
-            width: parent.width
+            Layout.fillWidth: true
             height: 20
             color: "black"
             border.color: "white"
@@ -161,6 +162,7 @@ ServiceWindow {
 
         StatusPanel {
             id: statusPanel
+            Layout.fillWidth: true
             foregroundColor: MyStyle.foregroundColor
             backgroundColor: MyStyle.backgroundColor
             background: "transparent"
@@ -168,8 +170,9 @@ ServiceWindow {
 
         TabView {
             id: mainTab
-            Layout.preferredWidth: window.width
-            Layout.preferredHeight: 580
+            Layout.fillWidth: true
+            //Layout.preferredHeight: 580
+            Layout.fillHeight: true
             currentIndex: 0
             frameVisible: true
             transformOrigin: Item.Center

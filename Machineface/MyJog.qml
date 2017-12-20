@@ -149,118 +149,104 @@ ApplicationItem {
         }
     }
 
-    ColumnLayout {
-        anchors.fill: parent
-        anchors.margins: Screen.pixelDensity
+
+    RowLayout {
         visible: root.status.synced
+        anchors.fill: parent
 
-        Item {
-            id: container
-
+        ColumnLayout {
             Layout.fillWidth: true
-            Layout.preferredHeight: Math.min(width / 1.2, parent.height - jog_speed.height)
+            Layout.fillHeight: true
 
-            RowLayout {
+            GridLayout {
+                id: jog_buttons
+                columns: 4
+                Layout.fillWidth: true
+                Layout.fillHeight: true
 
-                ColumnLayout {
-                    GridLayout {
-                        id: jog_buttons
-                        columns: 4
+                Repeater {
+                    model: 6
 
-                        Repeater {
-                            model: 6
+                    MyButton {
+                        property var _label: [ "X-", "X+", "Y-", "Y+", "Z-", "Z+"]
+                        property var _pos: [ [0, 1], [2, 1], [1, 2], [1, 0], [3, 2], [3, 0]]
+                        property var _pin: [pin_jog_0_minus, pin_jog_0_plus, pin_jog_1_minus, pin_jog_1_plus, pin_jog_2_minus, pin_jog_2_plus]
 
-                            MyButton {
-                                property var _label: [ "X-", "X+", "Y-", "Y+", "Z-", "Z+"]
-                                property var _pos: [ [0, 1], [2, 1], [1, 2], [1, 0], [3, 2], [3, 0]]
-                                property var _pin: [pin_jog_0_minus, pin_jog_0_plus, pin_jog_1_minus, pin_jog_1_plus, pin_jog_2_minus, pin_jog_2_plus]
-
-                                Layout.fillWidth: true
-                                Layout.fillHeight: true
-                                Layout.row: _pos[index][1]
-                                Layout.column: _pos[index][0]
-                                Layout.preferredHeight: 70
-                                text: _label[index]
-                                onPressedChanged: _pin[index].value = pressed
-                            }
-                        }
-                    }
-
-                    RowLayout {
-                        id: home_buttons
-                        HomeButton {
-                            axis: -1
-                            Layout.preferredHeight: 70
-                            axisName: "All"
-                        }
-
-                        HomeButton {
-                            axis: 0
-                            Layout.preferredHeight: 70
-                            axisName: "X"
-                        }
-
-                        HomeButton {
-                            axis: 1
-                            Layout.preferredHeight: 70
-                            axisName: "Y"
-                        }
-
-                        HomeButton {
-                            axis: 2
-                            Layout.preferredHeight: 70
-                            axisName: "Z"
-                        }
-                    }
-
-                    MyGroupBox {
-                        title: "Jog steps"
-                        RowLayout {
-                            id: jog_steps
-                            ExclusiveGroup { id: jog_steps_group }
-                            Repeater {
-                                model: [ 0.01, 0.1, 1, "Cont" ]
-                                MyButton {
-                                    text: modelData
-                                    onClicked: checked = !checked
-                                    exclusiveGroup: jog_steps_group
-                                }
-                            }
-                        }
-                    }
-
-                }
-
-                MyGroupBox {
-                    title: "Jog speed"
-                    ColumnLayout {
-                        id: jog_speed
-                        ExclusiveGroup { id: jog_speed_group }
-                        Repeater {
-                            model: _jog_speeds
-                            MyButton {
-                                text: modelData
-                                property int speed: modelData
-                                onClicked: checked = !checked
-                                exclusiveGroup: jog_speed_group
-                                onCheckedChanged: {
-                                    console.log(text + " checked=" + checked)
-                                    if (checked) {
-                                        pin_jog_speed.value = speed
-                                    }
-                                }
-                                checked: index === _jog_speed_index
-                            }
-                        }
+                        Layout.fillWidth: true
+                        Layout.row: _pos[index][1]
+                        Layout.column: _pos[index][0]
+                        text: _label[index]
+                        onPressedChanged: _pin[index].value = pressed
                     }
                 }
             }
 
+            RowLayout {
+                id: home_buttons
+                Layout.fillWidth: true
+                Layout.fillHeight: true
+                Repeater {
+                    model: 4
 
+                    HomeButton {
+                        property var _name: ["All", "X", "Y", "Z"]
+                        property var _axis: [-1, 0, 1, 2]
+
+                        axis: _axis[index]
+                        Layout.fillWidth: true
+                        axisName: _name[index]
+                    }
+                }
+            }
         }
-        Item {
-            Layout.fillHeight: true
+
+        MyGroupBox {
+            title: "Jog speed"
+            Layout.alignment: Qt.AlignTop
+
+            ColumnLayout {
+                id: jog_speed
+                ExclusiveGroup { id: jog_speed_group }
+                Repeater {
+                    model: _jog_speeds
+                    MyButton {
+                        text: modelData
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+
+                        property int speed: modelData
+                        onClicked: checked = !checked
+                        exclusiveGroup: jog_speed_group
+                        onCheckedChanged: {
+                            console.log(text + " checked=" + checked)
+                            if (checked) {
+                                pin_jog_speed.value = speed
+                            }
+                        }
+                        checked: index === _jog_speed_index
+                    }
+                }
+            }
+        }
+
+        MyGroupBox {
+            title: "Jog steps"
+            Layout.alignment: Qt.AlignTop
+
+            ColumnLayout {
+                id: jog_steps
+                ExclusiveGroup { id: jog_steps_group }
+                Repeater {
+                    model: [ 0.01, 0.1, 1, "Cont" ]
+                    MyButton {
+                        Layout.fillHeight: true
+                        Layout.fillWidth: true
+                        text: modelData
+                        onClicked: checked = !checked
+                        exclusiveGroup: jog_steps_group
+                    }
+                }
+            }
         }
     }
-
 }

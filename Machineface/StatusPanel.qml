@@ -20,6 +20,8 @@ ApplicationItem {
     property color homedColor: "green"
     property color unhomedColor: "red"
 
+    property bool _ready: status.synced
+
     property int axes: _ready ? status.config.axes : 4
     property var axisHomed: _ready ? status.motion.axis : [{"homed":false}, {"homed":false}, {"homed":false}, {"homed":false}]
     property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
@@ -28,7 +30,6 @@ ApplicationItem {
     property var mc_position: getPosition(false)
     property var wc_position: getPosition(true)
     property var dtg: _ready ? status.motion.dtg : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
-    property bool _ready: status.synced
     property var _axisNames: ["x", "y", "z", "a", "b", "c", "u", "v", "w"]
     property var g5xOffset: _ready ? status.motion.g5xOffset : {"x":-5.0, "y":+12.0, "z":-70, "a":2.0}
     property var g92Offset: _ready ? status.motion.g92Offset : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
@@ -49,7 +50,7 @@ ApplicationItem {
     property alias _pin_safety_disable: pin_safety_disable
     property alias _pin_vise_lock: pin_vise_lock
 
-    property var tool_in_spindle: status.io.toolTable[0]
+    property var tool_in_spindle: _ready ? status.io.toolTable[0] : { id:0, zOffset:0 }
     property int tool_number: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.id : 0
     property double tool_length: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.zOffset : 0
 
