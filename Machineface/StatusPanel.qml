@@ -50,9 +50,8 @@ ApplicationItem {
     property alias _pin_safety_disable: pin_safety_disable
     property alias _pin_vise_lock: pin_vise_lock
 
-    property var tool_in_spindle: _ready ? status.io.toolTable[0] : { id:0, zOffset:0 }
-    property int tool_number: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.id : 0
-    property double tool_length: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.zOffset : 0
+    property int tool_number: _ready ? status.io.toolInSpindle : 0
+    property double tool_length: _ready ? status.io.toolOffset["z"] : 0
 
     function getPosition(workpiece_coordinates) {
         var basePosition
@@ -223,7 +222,7 @@ ApplicationItem {
                     text: "Door Closed:"
                     font.pixelSize: 14
                     font.bold: true
-                    property point pos;
+                    property point pos
                     Component.onCompleted: {
                         pos = labelDoorClosed.mapToItem(statusPanel, 0, 0)
                         console.log(pos)
@@ -428,6 +427,15 @@ ApplicationItem {
                         PropertyChanges { target: safety_disabled_indicator; color: "black" }                    }
                 ]
             }
+
+//            Button {
+//                text: "Debug"
+//                onClicked: {
+//                    console.log(status.io.toolInSpindle)
+//                    console.log(JSON.stringify(status.io))
+//                    console.log(status.io.toolOffset["z"])
+//                }
+//            }
         }
     }
 
