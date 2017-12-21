@@ -79,12 +79,6 @@ ApplicationItem {
     RowLayout {
         id: container
         anchors.fill: parent
-//        color: background
-//        radius: 0
-//        anchors.rightMargin: 0
-//        anchors.leftMargin: 0
-//        anchors.topMargin: 0
-//        anchors.bottomMargin: 0
         enabled:  halRemoteComponent.ready //.connected
 
         HalPin {
