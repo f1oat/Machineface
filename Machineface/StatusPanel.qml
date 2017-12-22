@@ -11,8 +11,8 @@ import QtQuick 2.1
 
 ApplicationItem {
     id: statusPanel
-    width: 600
-    height: 249
+    //width: col.width
+    height: col.height
 
     property color foregroundColor: "white"
     property color backgroundColor: "black"
@@ -53,6 +53,12 @@ ApplicationItem {
     property int tool_number: _ready ? status.io.toolInSpindle : 0
     property double tool_length: _ready ? status.io.toolOffset["z"] : 0
 
+    property var gcodes_num: status.interp.gcodes
+    property var mcodes_num: status.interp.mcodes
+
+    property var gcodes
+    property var mcodes
+
     function getPosition(workpiece_coordinates) {
         var basePosition
         if (_ready) {
@@ -76,360 +82,426 @@ ApplicationItem {
         return a < b ? a : b
     }
 
-    RowLayout {
-        id: container
-        anchors.fill: parent
-        enabled:  halRemoteComponent.ready //.connected
+    function compareNumbers(a, b)
+    {
+        return a - b;
+    }
 
-        HalPin {
-            id: pin_spindle_at_speed
-            name: "spindle-at-speed"
-            type: HalPin.Bit
-            direction: HalPin.In
+    function sortint(arr) {
+        return arr.slice(1).sort(compareNumbers);
+    }
+
+    function update_gcodes()
+    {
+        var _gcodes = sortint(gcodes_num);
+        var tmp = ""
+
+        for (var i = 0, len = _gcodes.length; i < len; i++) {
+            var code = _gcodes[i]
+            if (code === -1) continue
+            else if ( (code %10) == 0) tmp += " G" + code/10
+            else tmp += " G" + Math.floor(code/10) + "." + (code%10)
         }
 
-        HalPin {
-            id: pin_safety_disable
-            name: "safety-disable"
-            type: HalPin.Bit
-            direction: HalPin.Out
+        return tmp
+    }
+
+    function update_mcodes()
+    {
+        var tmp = "";
+        var _mcodes = sortint(mcodes_num);
+
+        for (var i = 0, len = _mcodes.length; i < len; i++) {
+            var code = _mcodes[i];
+            if (code === -1) continue;
+            else tmp += " M" + code;
         }
 
-        HalPin {
-            id: pin_vise_lock
-            name: "vise-lock"
-            type: HalPin.Bit
-            direction: HalPin.Out
-        }
+        return tmp;
+    }
 
-        Column { // DRO
-            id: coords
-            x: 1
-            y: 1
-            width: 300
-            anchors.bottomMargin: 2
-            anchors.left: parent.left
-            anchors.leftMargin: spacing
-            anchors.top: parent.top
-            anchors.topMargin: spacing
-            anchors.bottom: parent.bottom
-            spacing: 1
+    function onGcodes_numChanged()
+    {
+        gcodes = update_gcodes()
+    }
 
-            Repeater {
-                model: statusPanel.axes
-                DroLine {
-                    width: coords.width
-                    title: statusPanel.axisNames[index]
-                    wc_value: statusPanel.wc_position[statusPanel._axisNames[index]].toFixed(3)
-                    mc_value: statusPanel.mc_position[statusPanel._axisNames[index]].toFixed(3)
-                    dtg_value: statusPanel.dtg[statusPanel._axisNames[index]].toFixed(3)
-                    g5x: statusPanel.g5xNames[statusPanel.g5xIndex-1]
-                    smallFontSize: statusPanel.smallFontSize
-                    foregroundColor: statusPanel.foregroundColor
-                    backgroundColor: statusPanel.backgroundColor
-                    digitsColor: statusPanel.axisHomed[index].homed ? statusPanel.homedColor : statusPanel.unhomedColor
-                    homed: statusPanel.axisHomed[index].homed
-                }
+    function onMcodes_numChanged()
+    {
+        mcodes = update_mcodes()
+    }
+
+    Column {
+        id: col
+        spacing: 2
+
+        Row {
+            id: container
+            enabled:  halRemoteComponent.ready //.connected
+            spacing: 4
+
+            HalPin {
+                id: pin_spindle_at_speed
+                name: "spindle-at-speed"
+                type: HalPin.Bit
+                direction: HalPin.In
             }
-        }
 
-        ColumnLayout {
-            id: _cstatus
-            Grid { // Spindle and velocity
+            HalPin {
+                id: pin_safety_disable
+                name: "safety-disable"
+                type: HalPin.Bit
+                direction: HalPin.Out
+            }
+
+            HalPin {
+                id: pin_vise_lock
+                name: "vise-lock"
+                type: HalPin.Bit
+                direction: HalPin.Out
+            }
+
+            Column { // DRO
+                id: coords
+                width: 300
                 spacing: 1
-                columns: 3
 
-                Label {
-                    id: labelSpindle
-                    color: foregroundColor
-                    font.bold: true
-                    text: "Spindle:"
-                    font.pixelSize: 14
-                }
-
-                Gauge {
-                    id: gaugeSpindle
-                    width: 170
-                    height: 20
-                    maximumValue: 3000.0
-                    z0BorderValue: 1e9
-                    z1BorderValue: 1e9
-                    backgroundColor: statusPanel.backgroundColor
-                    textColor: statusPanel.foregroundColor
-                    value: min(pin.value, maximumValue)
-                    decimals: 0
-
-                    HalPin {
-                        id: pin
-                        name: "spindle-speed"
-                        type: HalPin.Float
-                        direction: HalPin.In
+                Repeater {
+                    model: statusPanel.axes
+                    DroLine {
+                        width: coords.width
+                        title: statusPanel.axisNames[index]
+                        wc_value: statusPanel.wc_position[statusPanel._axisNames[index]].toFixed(3)
+                        mc_value: statusPanel.mc_position[statusPanel._axisNames[index]].toFixed(3)
+                        dtg_value: statusPanel.dtg[statusPanel._axisNames[index]].toFixed(3)
+                        g5x: statusPanel.g5xNames[statusPanel.g5xIndex-1]
+                        smallFontSize: statusPanel.smallFontSize
+                        foregroundColor: statusPanel.foregroundColor
+                        backgroundColor: statusPanel.backgroundColor
+                        digitsColor: statusPanel.axisHomed[index].homed ? statusPanel.homedColor : statusPanel.unhomedColor
+                        homed: statusPanel.axisHomed[index].homed
                     }
                 }
 
-                Led {
-                    id: ledSpindle
-                    x: 552
-                    y: 8
-                    width: 20
-                    height: 20
-                    onColor: "orange"
-                    blink: !pin_spindle_at_speed.value
-                    blinkInterval: 150
-                    value: statusPanel.spindleEnabled
+                Rectangle { // Safety disable
+                    id: safety_disabled_indicator
+                    width: 300
+                    height: 28
+                    property string _color: "#e99e08"
+                    property bool tictac: false
+                    color: _color
+
+                    Timer {
+                        interval: 250; running: true; repeat: true
+                        onTriggered: {
+                            safety_disabled_indicator.tictac = !safety_disabled_indicator.tictac
+                            safety_disabled_indicator.state = pin_safety_disable.value & safety_disabled_indicator.tictac ? 'on' : 'off'
+                        }
+                    }
+
+                    Text {
+                        id: text1
+                        x: 54
+                        y: 2
+                        color: "#970303"
+                        text: qsTr("SAFETY DISABLED")
+                        font.bold: true
+                        font.pixelSize: 19
+                    }
+
+                    states: [
+                        State {
+                            name: "on"
+                            PropertyChanges { target: text1; visible: true }
+                            PropertyChanges { target: safety_disabled_indicator; color: _color }
+                        },
+                        State {
+                            name: "off"
+                            PropertyChanges { target: text1; visible: false }
+                            PropertyChanges { target: safety_disabled_indicator; color: "black" }                    }
+                    ]
                 }
 
-                Label {
-                    id: labelVelocity
-                    color: foregroundColor
-                    font.bold: true
-                    text: "Velocity:"
-                    font.pixelSize: 14
-                }
-
-                Gauge {
-                    id: gaugeVelocity
-                    width: 170
-                    height: 20
-                    z: 1
-                    minimumValue: 0
-                    maximumValue: status.config.maxLinearVelocity * 60.0
-                    z0BorderValue: 1e9
-                    z1BorderValue: 1e9
-                    value: min(statusPanel.currentVel, maximumValue)
-                    backgroundColor: statusPanel.backgroundColor
-                    textColor: statusPanel.foregroundColor
-                    decimals: 0
+                Button {
+                    text: "Debug"
+                    onClicked: {
+                        console.log(JSON.stringify(status.io))
+                        console.log(JSON.stringify(status.interp.gcodes))
+                        console.log(JSON.stringify(status.interp.mcodes))
+                        console.log(update_gcodes())
+                        console.log(update_mcodes())
+                        gcodes = update_gcodes()
+                        mcodes = update_mcodes()
+                    }
                 }
             }
 
-            Grid { // Status LEDs
-                width: 234
-                height: 83
-                spacing: 3
-                columns: 4
-                columnSpacing: 15
+            Column {
+                id: _cstatus
+                Grid { // Spindle and velocity
+                    spacing: 1
+                    columns: 3
 
-                Label {
-                    id: labelDoorClosed
-                    color: foregroundColor
-                    text: "Door Closed:"
-                    font.pixelSize: 14
-                    font.bold: true
-                    property point pos
-                    Component.onCompleted: {
-                        pos = labelDoorClosed.mapToItem(statusPanel, 0, 0)
-                        console.log(pos)
+                    Label {
+                        id: labelSpindle
+                        color: foregroundColor
+                        font.bold: true
+                        text: "Spindle:"
+                        font.pixelSize: 14
+                    }
+
+                    Gauge {
+                        id: gaugeSpindle
+                        width: 170
+                        height: 20
+                        maximumValue: 3000.0
+                        z0BorderValue: 1e9
+                        z1BorderValue: 1e9
+                        backgroundColor: statusPanel.backgroundColor
+                        textColor: statusPanel.foregroundColor
+                        value: min(pin.value, maximumValue)
+                        decimals: 0
+
+                        HalPin {
+                            id: pin
+                            name: "spindle-speed"
+                            type: HalPin.Float
+                            direction: HalPin.In
+                        }
+                    }
+
+                    Led {
+                        id: ledSpindle
+                        width: 20
+                        height: 20
+                        onColor: "orange"
+                        blink: !pin_spindle_at_speed.value
+                        blinkInterval: 150
+                        value: statusPanel.spindleEnabled
+                    }
+
+                    Label {
+                        id: labelVelocity
+                        color: foregroundColor
+                        font.bold: true
+                        text: "Velocity:"
+                        font.pixelSize: 14
+                    }
+
+                    Gauge {
+                        id: gaugeVelocity
+                        width: 170
+                        height: 20
+                        z: 1
+                        minimumValue: 0
+                        maximumValue: status.config.maxLinearVelocity * 60.0
+                        z0BorderValue: 1e9
+                        z1BorderValue: 1e9
+                        value: min(statusPanel.currentVel, maximumValue)
+                        backgroundColor: statusPanel.backgroundColor
+                        textColor: statusPanel.foregroundColor
+                        decimals: 0
                     }
                 }
 
-                HalLed {
-                    id: ledDoorClosed
-                    name: "door-closed-led"
-                    width: 20
-                    height: 20
-                    onColor: "green"
-                }
+                Grid { // Status LEDs
+                    spacing: 3
+                    columns: 4
+                    columnSpacing: 15
 
-                Label {
-                    id: labelDoorLocked
-                    color: foregroundColor
-                    text: "Door Locked:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelDoorClosed
+                        color: foregroundColor
+                        text: "Door Closed:"
+                        font.pixelSize: 14
+                        font.bold: true
+                        property point pos
+                        Component.onCompleted: {
+                            pos = labelDoorClosed.mapToItem(statusPanel, 0, 0)
+                            console.log(pos)
+                        }
+                    }
 
-                HalLed {
-                    id: ledDoorLocked
-                    name: "door-unlocked-led"
-                    invert: true
-                    width: 20
-                    height: 20
-                    onColor: "green"
-                }
+                    HalLed {
+                        id: ledDoorClosed
+                        name: "door-closed-led"
+                        width: 20
+                        height: 20
+                        onColor: "green"
+                    }
 
-                Label {
-                    id: labelViseLocked
-                    color: foregroundColor
-                    text: "Vise Locked:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelDoorLocked
+                        color: foregroundColor
+                        text: "Door Locked:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                HalLed {
-                    id: ledViseLocked
-                    name: "vise-locked-led"
-                    width: 20
-                    height: 20
-                    onColor: "green"
-                }
+                    HalLed {
+                        id: ledDoorLocked
+                        name: "door-unlocked-led"
+                        invert: true
+                        width: 20
+                        height: 20
+                        onColor: "green"
+                    }
 
-                Label {
-                    id: labelToolLocked
-                    color: foregroundColor
-                    text: "Tool Locked:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelViseLocked
+                        color: foregroundColor
+                        text: "Vise Locked:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                HalLed {
-                    id: ledToolUnLocked
-                    name: "tool-unlocked-led"
-                    onColor: "green"
-                    invert: true
-                    width: 20
-                    height: 20
-                }
+                    HalLed {
+                        id: ledViseLocked
+                        name: "vise-locked-led"
+                        width: 20
+                        height: 20
+                        onColor: "green"
+                    }
 
-                Label {
-                    id: labelPressureOK
-                    color: foregroundColor
-                    text: "Pressure OK:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelToolLocked
+                        color: foregroundColor
+                        text: "Tool Locked:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                HalLed {
-                    id: ledPressureOK
-                    name: "pressure-ok-led"
-                    onColor: "green"
-                    width: 20
-                    height: 20
-                }
+                    HalLed {
+                        id: ledToolUnLocked
+                        name: "tool-unlocked-led"
+                        onColor: "green"
+                        invert: true
+                        width: 20
+                        height: 20
+                    }
 
-                Label {
-                    id: labelMistOn
-                    color: foregroundColor
-                    text: "Mist On:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelPressureOK
+                        color: foregroundColor
+                        text: "Pressure OK:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                HalLed {
-                    id: ledMistOn
-                    name: "mist-on-led"
-                    onColor: "orange"
-                    width: 20
-                    height: 20
-                }
+                    HalLed {
+                        id: ledPressureOK
+                        name: "pressure-ok-led"
+                        onColor: "green"
+                        width: 20
+                        height: 20
+                    }
 
-                Label {
-                    id: labelCurrentTool
-                    color: foregroundColor
-                    text: "Current Tool:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelMistOn
+                        color: foregroundColor
+                        text: "Mist On:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                Label {
-                    id: labelToolNumber
-                    color: statusPanel.foregroundColor
-                    text: tool_number ? tool_number : "-"
-                    font.pixelSize: 14
-                    font.bold: true
+                    HalLed {
+                        id: ledMistOn
+                        name: "mist-on-led"
+                        onColor: "orange"
+                        width: 20
+                        height: 20
+                    }
 
-                }
+                    Label {
+                        id: labelCurrentTool
+                        color: foregroundColor
+                        text: "Current Tool:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                Label {
-                    id: labelToolLength
-                    color: foregroundColor
-                    text: "Length:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelToolNumber
+                        color: statusPanel.foregroundColor
+                        text: tool_number ? tool_number : "-"
+                        font.pixelSize: 14
+                        font.bold: true
 
-                Label {
-                    id: labelToolLength2
-                    color: statusPanel.foregroundColor
-                    text: tool_length.toFixed(2)
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    }
 
-                Label {
-                    id: labelProbe
-                    color: foregroundColor
-                    text: "Probe:"
-                    font.pixelSize: 14
-                    font.bold: true
-                }
+                    Label {
+                        id: labelToolLength
+                        color: foregroundColor
+                        text: "Length:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                HalLed {
-                    id: ledProbe
-                    name: "probe-led"
-                    onColor: "orange"
-                    width: 20
-                    height: 20
-                }
-            }
+                    Label {
+                        id: labelToolLength2
+                        color: statusPanel.foregroundColor
+                        text: tool_length.toFixed(2)
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-            Row { // Feedrate and spindle rate
-                spacing: 20
-                Label {
-                    id: labelFeedrate
-                    color: foregroundColor
-                    font.bold: true
-                    text: "F " + real_feedrate
-                    font.pixelSize: 20
-                }
+                    Label {
+                        id: labelProbe
+                        color: foregroundColor
+                        text: "Probe:"
+                        font.pixelSize: 14
+                        font.bold: true
+                    }
 
-                Label {
-                    id: labelSpindlerate
-                    color: foregroundColor
-                    font.bold: true
-                    text: "S " + real_spindlerate
-                    font.pixelSize: 20
-                }
-
-            }
-
-            Rectangle { // Safety disable
-                id: safety_disabled_indicator
-                width: 285
-                height: 39
-                property string _color: "#e99e08"
-                property bool tictac: false
-                color: _color
-
-                Timer {
-                    interval: 250; running: true; repeat: true
-                    onTriggered: {
-                        safety_disabled_indicator.tictac = !safety_disabled_indicator.tictac
-                        safety_disabled_indicator.state = pin_safety_disable.value & safety_disabled_indicator.tictac ? 'on' : 'off'
+                    HalLed {
+                        id: ledProbe
+                        name: "probe-led"
+                        onColor: "orange"
+                        width: 20
+                        height: 20
                     }
                 }
 
-                Text {
-                    id: text1
-                    x: 54
-                    y: 8
-                    color: "#970303"
-                    text: qsTr("SAFETY DISABLED")
-                    font.bold: true
-                    font.pixelSize: 19
+                Row { // Feedrate and spindle rate
+                    spacing: 20
+                    Label {
+                        id: labelFeedrate
+                        color: foregroundColor
+                        font.bold: true
+                        text: "F " + real_feedrate
+                        font.pixelSize: 20
+                    }
+
+                    Label {
+                        id: labelSpindlerate
+                        color: foregroundColor
+                        font.bold: true
+                        text: "S " + real_spindlerate
+                        font.pixelSize: 20
+                    }
+
                 }
-
-                states: [
-                    State {
-                        name: "on"
-                        PropertyChanges { target: text1; visible: true }
-                        PropertyChanges { target: safety_disabled_indicator; color: _color }
-                    },
-                    State {
-                        name: "off"
-                        PropertyChanges { target: text1; visible: false }
-                        PropertyChanges { target: safety_disabled_indicator; color: "black" }                    }
-                ]
             }
+        }
 
-//            Button {
-//                text: "Debug"
-//                onClicked: {
-//                    console.log(status.io.toolInSpindle)
-//                    console.log(JSON.stringify(status.io))
-//                    console.log(status.io.toolOffset["z"])
-//                }
-//            }
+        Rectangle { // GCODES & MCODE
+            width: statusPanel.width
+            height: 40
+            color: "black"
+            border.color: "white"
+            border.width: 1
+            Column {
+                anchors.margins: 2
+                anchors.left: parent.left
+                anchors.top: parent.top
+                Label {
+                    color: "white"
+                    text: gcodes
+                }
+                Label {
+                    color: "white"
+                    text: mcodes
+                }
+            }
         }
     }
 

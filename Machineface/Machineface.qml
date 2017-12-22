@@ -90,15 +90,13 @@ ServiceWindow {
     }
 
     ColumnLayout {
-        anchors.fill: parent
         id: container
+        anchors.fill: parent
+        spacing: 2
 
         ApplicationToolBar {
             id: toolBar
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            //height: 70
-            Layout.preferredHeight:25
+            height: 70
         }
 
         Rectangle {
@@ -172,11 +170,11 @@ ServiceWindow {
         TabView {
             id: mainTab
             Layout.fillWidth: true
-            //Layout.preferredHeight: 580
             Layout.fillHeight: true
             currentIndex: 0
             frameVisible: true
-            transformOrigin: Item.Center
+            //transformOrigin: Item.Center
+            //tabPosition: Qt.TopEdge
 
             style: TabViewStyle {
                            frameOverlap: 1
@@ -216,7 +214,7 @@ ServiceWindow {
             }
             MdiTab {active: true}
             GCodeTab {active: true}
-            PreviewTab {active: true}
+            //PreviewTab {active: true}
             //VideoTab {}
             //ExtrasTab {}
             //SettingsTab {}

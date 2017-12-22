@@ -21,17 +21,17 @@ Tab {
             anchors.fill: parent
             spacing: 0
 
-//            PathView3D {
-//                id: pathView
-//                Layout.fillHeight: true
-//                Layout.fillWidth: true
-//                onViewModeChanged: {
-//                    cameraZoom = 0.95
-//                    cameraOffset = Qt.vector3d(0,0,0)
-//                    cameraPitch = 60
-//                    cameraHeading = -135
-//                }
-//            }
+            PathView3D {
+                id: pathView
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+                onViewModeChanged: {
+                    cameraZoom = 0.95
+                    cameraOffset = Qt.vector3d(0,0,0)
+                    cameraPitch = 60
+                    cameraHeading = -135
+                }
+            }
 
             Item {
                 Layout.fillHeight: true
