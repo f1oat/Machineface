@@ -195,7 +195,7 @@ ApplicationItem {
                     HomeButton {
                         property var _name: ["All", "X", "Y", "Z"]
                         property var _axis: [-1, 0, 1, 2]
-                        property var _pos: [ [0, 2], [ 0, 0], [2, 2], [3, 1]]
+                        property var _pos: [ [0, 2], [ 2, 2], [0, 0], [3, 1]]
 
                         axis: _axis[index]
                         axisName: _name[index]
