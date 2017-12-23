@@ -100,6 +100,7 @@ ServiceWindow {
         }
 
         Rectangle {
+            id: notif
             Layout.fillWidth: true
             height: 20
             color: "black"
@@ -136,7 +137,7 @@ ServiceWindow {
                         text = str
                         break
                     default:
-                        mainTab.currentIndex = 6
+                        logTab.visible = true
                         break
                     }
 
