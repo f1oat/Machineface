@@ -146,8 +146,9 @@ Tab {
                     var last = model[history.rowCount-1].command
                     var i = 0
                     while (i<history.rowCount-1) {
-                        if (model[i].command == last) {
+                        if (model[i].command === last) {
                             history.history.remove(i)
+                            break
                         }
                         else {
                             //console.log(i + " " + model[i].command)
