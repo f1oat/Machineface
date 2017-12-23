@@ -27,11 +27,8 @@ ApplicationItem {
     property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
     property var g5xNames: ["G54", "G55", "G56", "G57", "G58", "G59", "G59.1", "G59.2", "G59.3"]
     property int g5xIndex: _ready ? status.motion.g5xIndex : 1
-    property var mc_position: getPosition(false)
-    property var wc_position: getPosition(true)
-    property var dtg: _ready ? status.motion.dtg : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
     property var _axisNames: ["x", "y", "z", "a", "b", "c", "u", "v", "w"]
-    property var g5xOffset: _ready ? status.motion.g5xOffset : {"x":-5.0, "y":+12.0, "z":-70, "a":2.0}
+    property var g5xOffset: /*_ready ? status.motion.g5xOffset : */ {"x":-5.0, "y":+12.0, "z":-70, "a":2.0}
     property var g92Offset: _ready ? status.motion.g92Offset : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
     property var toolOffset: _ready ? status.io.toolOffset : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
     property double currentVel: _ready ? status.motion.currentVel * _timeFactor : 0.0
@@ -59,25 +56,6 @@ ApplicationItem {
 
     property var gcodes
     property var mcodes
-
-    function getPosition(workpiece_coordinates) {
-        var basePosition
-        if (_ready) {
-            basePosition = status.motion.actualPosition
-        }
-        else {
-            basePosition = {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
-        }
-
-        if (workpiece_coordinates) {
-            for (var i = 0; i < axes; ++i) {
-                var axisName = _axisNames[i]
-                basePosition[axisName] -= g5xOffset[axisName] + g92Offset[axisName] + toolOffset[axisName]
-            }
-        }
-
-        return basePosition
-    }
 
     function min(a, b) {
         return a < b ? a : b
@@ -171,9 +149,13 @@ ApplicationItem {
                     DroLine {
                         width: coords.width
                         title: statusPanel.axisNames[index]
-                        wc_value: statusPanel.wc_position[statusPanel._axisNames[index]].toFixed(3)
-                        mc_value: statusPanel.mc_position[statusPanel._axisNames[index]].toFixed(3)
-                        dtg_value: statusPanel.dtg[statusPanel._axisNames[index]].toFixed(3)
+
+                        property string axisName: statusPanel._axisNames[index]
+
+                        mc_value: status.motion.actualPosition[axisName]
+                        wc_value: mc_value - (g5xOffset[axisName] + g92Offset[axisName] + toolOffset[axisName])
+                        dtg_value: status.motion.dtg[axisName]
+
                         g5x: statusPanel.g5xNames[statusPanel.g5xIndex-1]
                         smallFontSize: statusPanel.smallFontSize
                         foregroundColor: statusPanel.foregroundColor

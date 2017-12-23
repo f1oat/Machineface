@@ -96,7 +96,7 @@ Rectangle {
             Label {
                 id: wc_dro
                 Layout.preferredWidth: bigFontSize * 9
-                text: round(wc_value, 3)
+                text: round(wc_value.toFixed(3), 3)
                 font.pixelSize: bigFontSize
                 anchors.right: parent.right
                 anchors.rightMargin: 3
@@ -133,7 +133,7 @@ Rectangle {
 
             Label {
                 id: abs_dro
-                text: round(mc_value, 3)
+                text: round(mc_value.toFixed(3), 3)
                 font.pixelSize: smallFontSize
                 anchors.rightMargin: -(dummySmall.width + 4)
                 anchors.right: abs_label.right
@@ -157,7 +157,7 @@ Rectangle {
 
             Label {
                 id: dtg_dro
-                text: round(dtg_value, 3)
+                text: round(dtg_value.toFixed(3), 3)
                 font.pixelSize: smallFontSize
                 anchors.right: parent.right
                 anchors.rightMargin: 4
