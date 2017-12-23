@@ -37,6 +37,8 @@ Tab {
 
                 MyGroupBox {
                     title: "Spindle"
+                    ExclusiveGroup { id: spindle_group }
+
                     Row {
                         id: spindle
                         spacing: 10
@@ -44,11 +46,15 @@ Tab {
                         MyButton {
                             action: StopSpindleAction { }
                             text: "Spindle\nStop"
+                            exclusiveGroup: spindle_group
+                            onClicked: checked = true
                         }
 
                         MyButton {
                             action: SpindleCwAction { }
                             text: "Spindle\nCW"
+                            exclusiveGroup: spindle_group
+                            onClicked: checked = true
                         }
                     }
                 }
