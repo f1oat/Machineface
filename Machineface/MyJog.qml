@@ -22,19 +22,10 @@ ApplicationItem {
     property bool zVisible: status.synced ? status.config.axes > 2 : true
     property bool aVisible: status.synced ? status.config.axes > 3 : true
     property bool jogVisible: halRemoteComponent.ready
-    property var _jog_speeds: [ 3000, 1000, 500, 100 ]
-    property var _jog_speed_index: 0
-    property var _booting: true
 
-    function normalize_speed(speed) {
-        if (speed >= _jog_speeds[0]) return 0;
-        for (var i=1; i<_jog_speeds.length; i++) {
-            if (speed >= _jog_speeds[i]) {
-                if (speed > (_jog_speeds[i] + _jog_speeds[i-1])/2) return i-1
-                else return i;
-            }
-        }
-    }
+    property var _jog_speeds: [ 3000, 1000, 500, 100 ]
+    property var _jog_steps: [ 0, 1, 0.1 , 0.01 ]
+    property var _jog_steps_labels: [ "Cont", 1, 0.1 , 0.01 ]
 
     id: root
 
@@ -46,13 +37,10 @@ ApplicationItem {
             name: "jog-speed"
             type: HalPin.Float
             direction: HalPin.Out
+
+            property bool _booting: true
             onSyncedChanged: {
-                if (_booting) {
-                    console.log("jog-speed=", value)
-                    _jog_speed_index = normalize_speed(value)
-                    value = _jog_speeds[_jog_speed_index]
-                    console.log("normalized jog-speed=", value)
-                }
+                if (_booting) jog_speed.value = value
                 _booting = false
             }
         }
@@ -62,6 +50,13 @@ ApplicationItem {
             name: "jog-increment"
             type: HalPin.Float
             direction: HalPin.Out
+
+            property bool _booting: true
+            onSyncedChanged: {
+                if (_booting) jog_step.value = value
+                _booting = false
+                console.log("**** " + value)
+            }
         }
 
         HalPin {
@@ -211,52 +206,26 @@ ApplicationItem {
             }
         }
 
-        MyGroupBox {
-            title: "Jog speed"
-            Layout.alignment: Qt.AlignTop
+        Selector {
+            id: jog_speed
+            title: "Jog Speed"
+            values_list: _jog_speeds
+            value: 100
 
-            ColumnLayout {
-                id: jog_speed
-                ExclusiveGroup { id: jog_speed_group }
-                Repeater {
-                    model: _jog_speeds
-                    MyButton {
-                        text: modelData
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-
-                        property int speed: modelData
-                        onClicked: checked = !checked
-                        exclusiveGroup: jog_speed_group
-                        onCheckedChanged: {
-                            console.log(text + " checked=" + checked)
-                            if (checked) {
-                                pin_jog_speed.value = speed
-                            }
-                        }
-                        checked: index === _jog_speed_index
-                    }
-                }
+            onValueChanged: {
+                pin_jog_speed.value = value
             }
         }
 
-        MyGroupBox {
-            title: "Jog steps"
-            Layout.alignment: Qt.AlignTop
+        Selector {
+            id: jog_step
+            title: "Jog Step"
+            values_list: _jog_steps
+            labels_list: _jog_steps_labels
+            value: 0.01
 
-            ColumnLayout {
-                id: jog_steps
-                ExclusiveGroup { id: jog_steps_group }
-                Repeater {
-                    model: [ 0.01, 0.1, 1, "Cont" ]
-                    MyButton {
-                        Layout.fillHeight: true
-                        Layout.fillWidth: true
-                        text: modelData
-                        onClicked: checked = !checked
-                        exclusiveGroup: jog_steps_group
-                    }
-                }
+            onValueChanged: {
+                pin_jog_increment.value = value
             }
         }
     }
