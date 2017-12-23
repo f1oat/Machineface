@@ -159,12 +159,15 @@ ApplicationItem {
             Layout.fillHeight: true
 
             GridLayout {
-                id: jog_buttons
+                id: jog_layout
                 columns: 4
+                Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                 Layout.fillWidth: true
-                Layout.fillHeight: true
+
+                // Jog Buttons
 
                 Repeater {
+                    id: jog_buttons
                     model: 6
 
                     MyButton {
@@ -173,28 +176,36 @@ ApplicationItem {
                         property var _pin: [pin_jog_0_minus, pin_jog_0_plus, pin_jog_1_minus, pin_jog_1_plus, pin_jog_2_minus, pin_jog_2_plus]
 
                         Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        Layout.maximumHeight: MyStyle.buttonSize
+                        Layout.maximumWidth: MyStyle.buttonSize
+
                         Layout.row: _pos[index][1]
                         Layout.column: _pos[index][0]
                         text: _label[index]
                         onPressedChanged: _pin[index].value = pressed
                     }
                 }
-            }
 
-            RowLayout {
-                id: home_buttons
-                Layout.fillWidth: true
-                Layout.fillHeight: true
+                // Home Buttons
+
                 Repeater {
+                    id: home_buttons
                     model: 4
 
                     HomeButton {
                         property var _name: ["All", "X", "Y", "Z"]
                         property var _axis: [-1, 0, 1, 2]
+                        property var _pos: [ [0, 2], [ 0, 0], [2, 2], [3, 1]]
 
                         axis: _axis[index]
-                        Layout.fillWidth: true
                         axisName: _name[index]
+
+                        Layout.preferredWidth: 50
+                        Layout.preferredHeight: Layout.preferredWidth
+                        Layout.row: _pos[index][1]
+                        Layout.column: _pos[index][0]
+                        Layout.alignment: Qt.AlignHCenter | Qt.AlignVCenter
                     }
                 }
             }

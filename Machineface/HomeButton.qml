@@ -7,9 +7,6 @@ MyButton {
     property string axisName: "X"
     property string color: "black"
 
-    width: MyStyle.buttonSize
-    height: MyStyle.buttonSize
-
     id: root
 
     SystemPalette { id: systemPalette }

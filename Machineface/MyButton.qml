@@ -10,6 +10,7 @@ Button {
     property int pixelSize: 14
     property color textColor: MyStyle.foregroundColor
     property string pressed_color: "lightgreen"
+
     implicitWidth: MyStyle.buttonSize
     implicitHeight: MyStyle.buttonSize*0.7
 
