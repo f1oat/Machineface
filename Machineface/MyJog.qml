@@ -169,6 +169,7 @@ ApplicationItem {
                         property var _label: [ "X-", "X+", "Y-", "Y+", "Z-", "Z+"]
                         property var _pos: [ [0, 1], [2, 1], [1, 2], [1, 0], [3, 2], [3, 0]]
                         property var _pin: [pin_jog_0_minus, pin_jog_0_plus, pin_jog_1_minus, pin_jog_1_plus, pin_jog_2_minus, pin_jog_2_plus]
+                        property var _pin_inc: [pin_jog_0_inc_minus, pin_jog_0_inc_plus, pin_jog_1_inc_minus, pin_jog_1_inc_plus, pin_jog_2_inc_minus, pin_jog_2_inc_plus]
 
                         Layout.fillWidth: true
                         Layout.fillHeight: true
@@ -178,7 +179,10 @@ ApplicationItem {
                         Layout.row: _pos[index][1]
                         Layout.column: _pos[index][0]
                         text: _label[index]
-                        onPressedChanged: _pin[index].value = pressed
+                        onPressedChanged: {
+                            if (pin_jog_increment.value === 0) _pin[index].value = pressed
+                            else _pin_inc[index].value = pressed
+                        }
                     }
                 }
 
