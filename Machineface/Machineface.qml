@@ -132,13 +132,21 @@ ServiceWindow {
                     if (f >= 0) return
 
                     str = str.replace(".000000", "")
+                    text = str
                     switch (type) {
+                    case ApplicationError.NmlError:
+                    case ApplicationError.OperatorError:
+                        color = "red"
+                        break;
+                    case ApplicationError.NmlDisplay:
+                    case ApplicationError.OperatorDisplay:
+                        color = "orange"
+                        break;
+                    case ApplicationError.NmlText:
                     case ApplicationError.OperatorText:
-                        text = str
-                        break
                     default:
-                        logTab.visible = true
-                        break
+                        color = "green"
+                        break;
                     }
 
                     logModel.append({"type": type, "text": str})
