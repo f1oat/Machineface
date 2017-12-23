@@ -11,6 +11,8 @@ import Machinekit.HalRemote.Controls 1.0
 import "."
 
 ApplicationItem {
+    id: root
+
     property var numberModel: numberModelBase.concat(["∞"])
     property var numberModelBase: status.synced ? status.config.increments.split(" ") : []
     property var numberModelReverse: {
@@ -27,7 +29,14 @@ ApplicationItem {
     property var _jog_steps: [ 0, 1, 0.1 , 0.01 ]
     property var _jog_steps_labels: [ "Cont", 1, 0.1 , 0.01 ]
 
-    id: root
+    property bool _ready: status.synced
+
+    on_ReadyChanged: {
+        if (_ready) {
+            jog_speed.set(pin_jog_speed.value)
+            jog_step.set(pin_jog_increment.value)
+        }
+    }
 
     Item {
         //visible: jogVisible
@@ -37,12 +46,7 @@ ApplicationItem {
             name: "jog-speed"
             type: HalPin.Float
             direction: HalPin.Out
-
-            property bool _booting: true
-            onSyncedChanged: {
-                if (_booting) jog_speed.value = value
-                _booting = false
-            }
+            value: jog_speed.value
         }
 
         HalPin {
@@ -50,13 +54,7 @@ ApplicationItem {
             name: "jog-increment"
             type: HalPin.Float
             direction: HalPin.Out
-
-            property bool _booting: true
-            onSyncedChanged: {
-                if (_booting) jog_step.value = value
-                _booting = false
-                console.log("**** " + value)
-            }
+            value: jog_step.value
         }
 
         HalPin {
@@ -214,11 +212,7 @@ ApplicationItem {
             id: jog_speed
             title: "Jog Speed"
             values_list: _jog_speeds
-            value: 100
-
-            onValueChanged: {
-                pin_jog_speed.value = value
-            }
+            value: 0
         }
 
         Selector {
@@ -226,11 +220,7 @@ ApplicationItem {
             title: "Jog Step"
             values_list: _jog_steps
             labels_list: _jog_steps_labels
-            value: 0.01
-
-            onValueChanged: {
-                pin_jog_increment.value = value
-            }
+            value: 0
         }
     }
 }
