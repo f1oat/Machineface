@@ -50,8 +50,9 @@ ApplicationItem {
     property alias _pin_safety_disable: pin_safety_disable
     property alias _pin_vise_lock: pin_vise_lock
 
-    property int tool_number: _ready ? status.io.toolInSpindle : 0
-    property double tool_length: _ready ? status.io.toolOffset["z"] : 0
+    property var tool_in_spindle: _ready ? status.io.toolTable[0] : null
+    property int tool_number: _ready ? tool_in_spindle.id : 0
+    property double tool_length: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.offset.z : 0
 
     property var gcodes_num: status.interp.gcodes
     property var mcodes_num: status.interp.mcodes
@@ -224,11 +225,11 @@ ApplicationItem {
                 Button {
                     text: "Debug"
                     onClicked: {
-                        console.log(JSON.stringify(status.io))
-                        console.log(JSON.stringify(status.interp.gcodes))
-                        console.log(JSON.stringify(status.interp.mcodes))
-                        console.log(update_gcodes())
-                        console.log(update_mcodes())
+                        console.log(JSON.stringify(status))
+                        console.log(status.interp.interpState)
+                        console.log(status.interp.interpreterErrcode)
+                        console.log(JSON.stringify(status.io.toolTable[0]))
+                        console.log(tool_in_spindle.offset.z)
                         gcodes = update_gcodes()
                         mcodes = update_mcodes()
                     }
