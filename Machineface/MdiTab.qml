@@ -8,6 +8,8 @@ import Machinekit.Application.Controls 1.0
 
 Tab {
     title: qsTr("MDI")
+    property var notifications
+
     ColumnLayout {
         anchors.fill: parent
         anchors.margins: Screen.pixelDensity * 1
@@ -139,6 +141,7 @@ Tab {
                 id: mdiCommandAction
                 mdiCommand: mdiTextField.text
                 onTriggered: {
+                    notifications.clear()
                     mdiTextField.text = ''
                     //mdiHistoryPos = -1
                     // Remove any identical item in the history

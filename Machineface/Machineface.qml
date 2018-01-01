@@ -107,6 +107,7 @@ ServiceWindow {
             color: "black"
             border.color: "white"
             border.width: 1
+
             Label {
                 id: notificationLine
                 anchors.margins: 2
@@ -118,7 +119,6 @@ ServiceWindow {
                 font.bold: true
                 visible: false
 
-                property bool display: applicationCore.status.running
                 property variant filter: ["motion stopped by enable input"]
 
                 Timer {
@@ -153,11 +153,9 @@ ServiceWindow {
                     logModel.append({"type": type, "text": str})
                 }
 
-                onDisplayChanged: {
-                    if (!display) {
-                        text = ""
-                        notificationLine.visible = false
-                    }
+                function clear() {
+                    notificationLine.text = ""
+                    notificationLine.visible = false
                 }
 
                 onTextChanged: {
@@ -222,7 +220,10 @@ ServiceWindow {
                      toolBar.abort.connect(abort)
                  }
             }
-            MdiTab {active: true}
+            MdiTab {
+                active: true
+                notifications: notificationLine
+            }
             GCodeTab {active: true}
             //PreviewTab {active: true}
             //VideoTab {}
