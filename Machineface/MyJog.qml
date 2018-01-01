@@ -34,7 +34,9 @@ ApplicationItem {
     on_ReadyChanged: {
         if (_ready) {
             jog_speed.set(pin_jog_speed.value)
+            jog_speed.value = pin_jog_speed.value
             jog_step.set(pin_jog_increment.value)
+            jog_step.value = pin_jog_increment.value
         }
     }
 
