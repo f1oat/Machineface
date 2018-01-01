@@ -9,6 +9,9 @@ import Machinekit.Application.Controls 1.0
 Rectangle {
     id: rect
     color: "#000000"
+    property real maxheight: 70
+
+    height: Math.min(maxheight, width/9)
 
     SystemPalette { id: systemPalette }
     FontLoader { id: iconFont; source: "icons/material-icon-font.ttf" }

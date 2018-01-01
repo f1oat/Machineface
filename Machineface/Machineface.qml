@@ -94,9 +94,10 @@ ServiceWindow {
         anchors.fill: parent
         spacing: 2
 
-        ApplicationToolBar {
+        ApplicationToolBar {   
             id: toolBar
-            height: 70
+            maxheight: 70
+            Layout.fillWidth: true
         }
 
         Rectangle {
