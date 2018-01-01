@@ -97,7 +97,7 @@ ServiceWindow {
         ApplicationToolBar {   
             id: toolBar
             maxheight: 70
-            Layout.fillWidth: true
+            width: container.width
         }
 
         Rectangle {
