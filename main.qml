@@ -37,22 +37,27 @@ ApplicationWindow {
     statusBar: connectionWindow.statusBar
     menuBar: connectionWindow.menuBar
 
-    ConnectionWindow {
+    Init {
         id: connectionWindow
-
         anchors.fill: parent
-        defaultTitle: "Machineface"
-        autoSelectInstance: false
-        autoSelectApplication: true
-        remoteVisible: false
-        lookupMode: ServiceDiscovery.MulticastDNS
-        applications: [
-            ApplicationDescription {
-                sourceDir: "qrc:/Machineface/"
-            }
-        ]
-        instanceFilter: ServiceDiscoveryFilter{ name: "" }
     }
+
+//    ConnectionWindow {
+//        id: connectionWindow
+
+//        anchors.fill: parent
+//        defaultTitle: "Machineface"
+//        autoSelectInstance: false
+//        autoSelectApplication: true
+//        remoteVisible: false
+//        lookupMode: ServiceDiscovery.MulticastDNS
+//        applications: [
+//            ApplicationDescription {
+//                sourceDir: "qrc:/Machineface/"
+//            }
+//        ]
+//        instanceFilter: ServiceDiscoveryFilter{ name: "" }
+//    }
 }
 
 

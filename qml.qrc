@@ -65,5 +65,6 @@
         <file>Machineface/MyGroupBox.qml</file>
         <file>Machineface/LogHistory.qml</file>
         <file>Machineface/MyMdiCommandAction.qml</file>
+        <file>Init.qml</file>
     </qresource>
 </RCC>
