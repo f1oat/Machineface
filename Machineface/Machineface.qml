@@ -120,11 +120,17 @@ ServiceWindow {
                 visible: false
 
                 property variant filter: ["motion stopped by enable input"]
+                property bool display: applicationCore.status.running
 
                 Timer {
                     id: blinker
-                    interval: 250; running: display; repeat: true
+                    interval: 250; running: notificationLine.display; repeat: true
                     onTriggered: notificationLine.visible = !notificationLine.visible
+                    onRunningChanged: {
+                        if (!running) {
+                            notificationLine.visible = true
+                        }
+                    }
                 }
 
                 function addNotification (type, str)
@@ -133,7 +139,18 @@ ServiceWindow {
                     if (f >= 0) return
 
                     str = str.replace(".000000", "")
+
+                    // As we cannot send and OPERATOR_TEXT message from Python,
+                    // we use '*' as first character to identify this type of message
+
+                    if (str[0] === '*') {
+                        type = ApplicationError.OperatorText;
+                        str = str.substring(1)
+                    }
+
                     text = str
+
+
                     switch (type) {
                     case ApplicationError.NmlError:
                     case ApplicationError.OperatorError:
