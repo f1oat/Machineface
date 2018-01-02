@@ -49,6 +49,7 @@ ApplicationItem {
             type: HalPin.Float
             direction: HalPin.Out
             value: jog_speed.value
+            onValueChanged: jog_speed.set(value)
         }
 
         HalPin {
@@ -57,6 +58,7 @@ ApplicationItem {
             type: HalPin.Float
             direction: HalPin.Out
             value: jog_step.value
+            onValueChanged: jog_step.set(value)
         }
 
         HalPin {
@@ -214,7 +216,6 @@ ApplicationItem {
             id: jog_speed
             title: "Jog Speed"
             values_list: _jog_speeds
-            //value: 0
         }
 
         Selector {
@@ -222,7 +223,6 @@ ApplicationItem {
             title: "Jog Step"
             values_list: _jog_steps
             labels_list: _jog_steps_labels
-            //value: 0
         }
     }
 }
