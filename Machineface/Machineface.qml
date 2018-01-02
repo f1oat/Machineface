@@ -221,28 +221,38 @@ ServiceWindow {
                            frame: Rectangle { color: "transparent" /*MyStyle.backgroundColor*/ }
                        }
 
-            JogControlTab {active: true}
+            JogControlTab {
+                active: true
+            }
+
             MiscTab {
                 active: true
                 pin_safety_disable: statusPanel._pin_safety_disable
                 pin_vise_lock: statusPanel._pin_vise_lock
                 pin_vise_locked_led: statusPanel._pin_vise_locked_led
             }
+
             ToolsTab {
                  active: true
                  pin_vise_locked_led: statusPanel._pin_vise_locked_led
                  tool_number: statusPanel.tool_number
                  Component.onCompleted: {
-                     console.log("connect2")
+                     console.log("connect2 " + Qt.platform.os)
                      toolBar.abort.connect(abort)
                  }
             }
+
             MdiTab {
                 active: true
                 notifications: notificationLine
             }
-            GCodeTab {active: true}
-            //PreviewTab {active: true}
+
+            GCodeTab {
+                active: true
+            }
+
+            PreviewTab {
+            }
             //VideoTab {}
             //ExtrasTab {}
             //SettingsTab {}
