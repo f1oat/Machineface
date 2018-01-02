@@ -16,7 +16,6 @@ Tab {
     id: tab
     title: qsTr("Tools")
     property int tool_number
-    property bool _ready: status.synced && command.connected
     property HalPin pin_vise_locked_led
     signal abort
 

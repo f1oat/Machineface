@@ -20,13 +20,13 @@ ApplicationItem {
     property color homedColor: "green"
     property color unhomedColor: "red"
 
-    property bool _ready: status.synced
+    property bool _ready: status.synced && command.connected
 
     property int axes: _ready ? status.config.axes : 4
     property var axisHomed: _ready ? status.motion.axis : [{"homed":false}, {"homed":false}, {"homed":false}, {"homed":false}]
     property var axisNames: ["X", "Y", "Z", "A", "B", "C", "U", "V", "W"]
     property var g5xNames: ["G54", "G55", "G56", "G57", "G58", "G59", "G59.1", "G59.2", "G59.3"]
-    property int g5xIndex: _ready ? status.motion.g5xIndex : 1
+    property int g5xIndex: (_ready && status.motion.g5xIndex > 0)? status.motion.g5xIndex : 1
     property var _axisNames: ["x", "y", "z", "a", "b", "c", "u", "v", "w"]
     property var g5xOffset: /*_ready ? status.motion.g5xOffset : */ {"x":-5.0, "y":+12.0, "z":-70, "a":2.0}
     property var g92Offset: _ready ? status.motion.g92Offset : {"x":0.0, "y":0.0, "z":0.0, "a":0.0}
@@ -48,14 +48,14 @@ ApplicationItem {
     property alias _pin_vise_lock: pin_vise_lock
 
     property var tool_in_spindle: _ready ? status.io.toolTable[0] : null
-    property int tool_number: _ready ? tool_in_spindle.id : 0
-    property double tool_length: (_ready && tool_in_spindle.id  >0) ? tool_in_spindle.offset.z : 0
+    property int tool_number: (_ready && tool_in_spindle) ? tool_in_spindle.id : 0
+    property double tool_length: (_ready && tool_in_spindle && tool_in_spindle.id  > 0) ? tool_in_spindle.offset.z : 0
 
     property var gcodes_num: status.interp.gcodes
     property var mcodes_num: status.interp.mcodes
 
-    property var gcodes
-    property var mcodes
+    property var gcodes: ""
+    property var mcodes: ""
 
     function min(a, b) {
         return a < b ? a : b
