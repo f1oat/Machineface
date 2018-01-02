@@ -103,7 +103,7 @@ ServiceWindow {
         Rectangle {
             id: notif
             Layout.fillWidth: true
-            height: 20
+            height: notificationLine.height+2
             color: "black"
             border.color: "white"
             border.width: 1
@@ -115,7 +115,7 @@ ServiceWindow {
                 anchors.top: parent.top
                 text: "idle"
                 color: "orange"
-                font.pixelSize: 14
+                font.pixelSize: 18
                 font.bold: true
                 visible: false
 
