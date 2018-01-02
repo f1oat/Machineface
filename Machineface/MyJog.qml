@@ -214,7 +214,7 @@ ApplicationItem {
             id: jog_speed
             title: "Jog Speed"
             values_list: _jog_speeds
-            value: 0
+            //value: 0
         }
 
         Selector {
@@ -222,7 +222,7 @@ ApplicationItem {
             title: "Jog Step"
             values_list: _jog_steps
             labels_list: _jog_steps_labels
-            value: 0
+            //value: 0
         }
     }
 }
