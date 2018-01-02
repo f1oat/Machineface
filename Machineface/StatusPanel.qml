@@ -146,7 +146,7 @@ ApplicationItem {
         Rectangle { // Modal GCODES
             id: modal_status
             width: statusPanel.width
-            height: gcode_list.height + 2
+            height: gcode_list.height + 4
             color: "black"
             border.color: "white"
             border.width: 1
@@ -157,6 +157,7 @@ ApplicationItem {
                 anchors.left: parent.left
                 anchors.top: parent.top
                 color: "yellow"
+                font.bold: true
                 text: gcodes
             }
         }

@@ -103,7 +103,7 @@ ServiceWindow {
         Rectangle {
             id: notif
             Layout.fillWidth: true
-            height: notificationLine.height+2
+            height: notificationLine.height+4
             color: "black"
             border.color: "white"
             border.width: 1
