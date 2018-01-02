@@ -27,7 +27,7 @@ ApplicationItem {
 
     property var _jog_speeds: [ 3000, 1000, 500, 100 ]
     property var _jog_steps: [ 0, 1, 0.1 , 0.01 ]
-    property var _jog_steps_labels: [ "Cont", 1, 0.1 , 0.01 ]
+    property var _jog_steps_labels: [ "Cont", "1", "0.1" , "0.01" ]
 
     property bool _ready: status.synced
 
