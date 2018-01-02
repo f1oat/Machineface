@@ -109,35 +109,62 @@ ApplicationItem {
         mcodes = update_mcodes()
     }
 
+    Timer {
+        interval: 1000; running: true; repeat: true
+        onTriggered: {
+            var new_gcodes = update_gcodes();
+            if (new_gcodes !== gcodes) gcodes = new_gcodes;
+        }
+
+    }
+
+    HalPin {
+        id: pin_spindle_at_speed
+        name: "spindle-at-speed"
+        type: HalPin.Bit
+        direction: HalPin.In
+    }
+
+    HalPin {
+        id: pin_safety_disable
+        name: "safety-disable"
+        type: HalPin.Bit
+        direction: HalPin.Out
+    }
+
+    HalPin {
+        id: pin_vise_lock
+        name: "vise-lock"
+        type: HalPin.Bit
+        direction: HalPin.Out
+    }
+
     Column {
         id: col
         spacing: 2
+
+        Rectangle { // Modal GCODES
+            id: modal_status
+            width: statusPanel.width
+            height: gcode_list.height + 2
+            color: "black"
+            border.color: "white"
+            border.width: 1
+
+            Label {
+                id: gcode_list
+                anchors.margins: 2
+                anchors.left: parent.left
+                anchors.top: parent.top
+                color: "yellow"
+                text: gcodes
+            }
+        }
 
         Row {
             id: container
             enabled:  halRemoteComponent.ready //.connected
             spacing: 4
-
-            HalPin {
-                id: pin_spindle_at_speed
-                name: "spindle-at-speed"
-                type: HalPin.Bit
-                direction: HalPin.In
-            }
-
-            HalPin {
-                id: pin_safety_disable
-                name: "safety-disable"
-                type: HalPin.Bit
-                direction: HalPin.Out
-            }
-
-            HalPin {
-                id: pin_vise_lock
-                name: "vise-lock"
-                type: HalPin.Bit
-                direction: HalPin.Out
-            }
 
             Column { // DRO
                 id: coords
@@ -167,7 +194,7 @@ ApplicationItem {
 
                 Rectangle { // Safety disable
                     id: safety_disabled_indicator
-                    width: 300
+                    width: parent.width
                     height: 28
                     property string _color: "#e99e08"
                     property bool tictac: false
@@ -204,18 +231,6 @@ ApplicationItem {
                     ]
                 }
 
-                Button {
-                    text: "Debug"
-                    onClicked: {
-                        console.log(JSON.stringify(status))
-                        console.log(status.interp.interpState)
-                        console.log(status.interp.interpreterErrcode)
-                        console.log(JSON.stringify(status.io.toolTable[0]))
-                        console.log(tool_in_spindle.offset.z)
-                        gcodes = update_gcodes()
-                        mcodes = update_mcodes()
-                    }
-                }
             }
 
             Column {
@@ -300,7 +315,6 @@ ApplicationItem {
                         property point pos
                         Component.onCompleted: {
                             pos = labelDoorClosed.mapToItem(statusPanel, 0, 0)
-                            console.log(pos)
                         }
                     }
 
@@ -466,26 +480,18 @@ ApplicationItem {
             }
         }
 
-        Rectangle { // GCODES & MCODE
-            width: statusPanel.width
-            height: 40
-            color: "black"
-            border.color: "white"
-            border.width: 1
-            Column {
-                anchors.margins: 2
-                anchors.left: parent.left
-                anchors.top: parent.top
-                Label {
-                    color: "white"
-                    text: gcodes
-                }
-                Label {
-                    color: "white"
-                    text: mcodes
-                }
-            }
-        }
+//        Button {
+//            text: "Debug"
+//            onClicked: {
+//                console.log(JSON.stringify(status))
+//                console.log(status.interp.interpState)
+//                console.log(status.interp.interpreterErrcode)
+//                console.log(JSON.stringify(status.io.toolTable[0]))
+//                console.log(tool_in_spindle.offset.z)
+//                gcodes = update_gcodes()
+//                mcodes = update_mcodes()
+//            }
+//        }
     }
 
     Rectangle {
