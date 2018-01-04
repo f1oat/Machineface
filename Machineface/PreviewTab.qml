@@ -8,6 +8,8 @@ import Machinekit.PathView 1.0
 Tab {
     title: qsTr("Preview")
 
+    property bool zoomButtons: !(Qt.platform.os == "android")
+
     Rectangle {
         anchors.fill: parent
         anchors.margins: Screen.pixelDensity
@@ -25,6 +27,8 @@ Tab {
                 id: pathView
                 Layout.fillHeight: true
                 Layout.fillWidth: true
+                visible: true
+
                 onViewModeChanged: {
                     cameraZoom = 0.95
                     cameraOffset = Qt.vector3d(0,0,0)
@@ -35,12 +39,12 @@ Tab {
 
             Item {
                 Layout.fillHeight: true
-                Layout.preferredWidth: height * 0.1
+                Layout.preferredWidth: 70
                 visible: pathView.visible
                 Rectangle {
                     width: parent.width
                     height: parent.height
-                    color: "white"
+                    color: "black"
                 }
 
                 ColumnLayout {
@@ -50,45 +54,57 @@ Tab {
                     anchors.margins: Screen.pixelDensity
                     spacing: Screen.pixelDensity
 
-                    TouchButton {
+                    MyButton {
+                        visible: zommButtons
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ZoomOutAction { view: pathView }
+                        showIcon: false
                     }
-                    TouchButton {
+                    MyButton {
+                        visible: zommButtons
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ZoomInAction { view: pathView }
+                        showIcon: false
                     }
-                    TouchButton {
+                    MyButton {
+                        visible: zommButtons
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ZoomOriginalAction { view: pathView }
+                        showIcon: false
                     }
-                    TouchButton {
+                    MyButton {
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ViewModeAction { view: pathView; viewMode: "Top"}
+                        showIcon: false
                     }
-                    TouchButton {
-                        Layout.fillWidth: true
-                        Layout.preferredHeight: width
-                        action: ViewModeAction { view: pathView; viewMode: "RotatedTop"}
-                    }
-                    TouchButton {
+//                    MyButton {
+//                        Layout.fillWidth: true
+//                        Layout.preferredHeight: width
+//                        action: ViewModeAction { view: pathView; viewMode: "RotatedTop"}
+//                        showIcon: false
+//                    }
+                    MyButton {
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ViewModeAction { view: pathView; viewMode: "Front"}
+                        showIcon: false
                     }
-                    TouchButton {
+                    MyButton {
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ViewModeAction { view: pathView; viewMode: "Side"}
+                        showIcon: false
                     }
-                    TouchButton {
+                    MyButton {
                         Layout.fillWidth: true
                         Layout.preferredHeight: width
                         action: ViewModeAction { view: pathView; viewMode: "Perspective"}
+                        showIcon: false
+                        text: "3D"
                     }
                     Item {
                         Layout.fillHeight: true

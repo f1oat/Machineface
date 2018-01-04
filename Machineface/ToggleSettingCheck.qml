@@ -18,5 +18,6 @@ RowLayout {
     Label {
         text: parent.text
         color: MyStyle.foregroundColor
+        font.pixelSize: 20
     }
 }

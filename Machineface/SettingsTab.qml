@@ -11,25 +11,25 @@ Tab {
             anchors.fill: parent
             anchors.margins: Screen.pixelDensity * 1
 
-            ToggleSettingCheck {
-                groupName: "dro"
-                valueName: "showOffsets"
-                text: qsTr("Show offsets")
-            }
+//            ToggleSettingCheck {
+//                groupName: "dro"
+//                valueName: "showOffsets"
+//                text: qsTr("Show offsets")
+//            }
 
-            ToggleSettingCheck {
-                id: showVelocityAction
-                groupName: "dro"
-                valueName: "showVelocity"
-                text: qsTr("Show velocity")
-            }
+//            ToggleSettingCheck {
+//                id: showVelocityAction
+//                groupName: "dro"
+//                valueName: "showVelocity"
+//                text: qsTr("Show velocity")
+//            }
 
-            ToggleSettingCheck {
-                id: showDistanceToGoAction
-                groupName: "dro"
-                valueName: "showDistanceToGo"
-                text: qsTr("Show distance to go")
-            }
+//            ToggleSettingCheck {
+//                id: showDistanceToGoAction
+//                groupName: "dro"
+//                valueName: "showDistanceToGo"
+//                text: qsTr("Show distance to go")
+//            }
 
             ToggleSettingCheck {
                 id: enablePreviewAction

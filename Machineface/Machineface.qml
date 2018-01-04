@@ -206,7 +206,7 @@ ServiceWindow {
                            tab: Rectangle {
                                color: styleData.selected ? "grey" : MyStyle.backgroundColor
                                border.color:  MyStyle.foregroundColor
-                               implicitWidth: Math.max(text.width + 4, 80)
+                               implicitWidth: mainTab.width / mainTab.count
                                implicitHeight: 70
                                radius: 2
                                Text {
@@ -255,7 +255,7 @@ ServiceWindow {
             }
             //VideoTab {}
             //ExtrasTab {}
-            //SettingsTab {}
+            SettingsTab {}
             Tab {
                 id: logTab
                 title: qsTr("Log")
