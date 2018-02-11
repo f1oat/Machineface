@@ -124,7 +124,7 @@ ServiceWindow {
 
                 Timer {
                     id: blinker
-                    interval: 250; running: notificationLine.display; repeat: true
+                    interval: 250; running: true; repeat: true
                     onTriggered: notificationLine.visible = !notificationLine.visible
                     onRunningChanged: {
                         if (!running) {
@@ -133,8 +133,30 @@ ServiceWindow {
                     }
                 }
 
+                Timer {
+                    id: notifClear
+                    interval: 500
+                }
+
+                Component.onCompleted: {
+                    console.log("XXXXXXXXXX");
+                    applicationCore.status.onTaskChanged.connect(taskChanged)
+                }
+
+                function taskChanged()
+                {
+                    console.log("toto " + applicationCore.status.task.taskState + "/" + ApplicationStatus.TaskStateOn);
+                    if (applicationCore.status.task.taskState === ApplicationStatus.TaskStateOn
+                            && !notifClear.running
+                            && !applicationCore.status.running) {
+                        clear();
+                    }
+                }
+
                 function addNotification (type, str)
                 {
+                    notifClear.restart();
+
                     var f = filter.indexOf(str)
                     if (f >= 0) return
 
@@ -178,7 +200,7 @@ ServiceWindow {
                 onTextChanged: {
                     if (text != "") {
                         notificationLine.visible = true
-                        blinker.start()
+                        //blinker.start()
                     }
                 }
             }
